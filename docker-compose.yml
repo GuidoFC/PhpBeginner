@@ -1,0 +1,54 @@
+# intalara esto en apache
+# composer install
+name: entorn_servidor_php
+services:
+  apache:
+    build:
+      context: .
+      dockerfile: ./apache/Dockerfile
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./apache:/var/www/html #ruta local:ruta container
+    ports:
+      - "8000:80"
+    networks:
+      - apachedb
+  mysql257:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin # Contraseña del usuario root
+      MYSQL_DATABASE: personas # Nombre de la base de datos a crear
+      MYSQL_USER: admin # Usuario adicional
+      MYSQL_PASSWORD: admin # Contraseña del usuario adicional
+    ports:
+      - "3307:3306" # Exponer MySQL en el puerto 3306
+    volumes:
+      - ./mysql_data:/var/lib/mysql # Volumen persistente para datos
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro # Script de inicialización
+    networks:
+      - apachedb
+
+networks:
+    apachedb:
+      driver: bridge
+#  mariadb:
+#    build:
+#      context: .
+#      dockerfile: ./mariadb/Dockerfile
+#    tty: true
+#    stdin_open: true
+#    environment:
+#      MYSQL_ROOT_PASSWORD: "1234"       # Contraseña del usuario root
+#      MYSQL_DATABASE: "myapp"   # Nombre de la base de datos por defecto
+#    volumes:
+#      - ./mariadb:/var/lib/mysql
+#    ports:
+#      - "3307:3306"
+#    networks:
+#      - apachedb
+#
+#networks:
+#  apachedb:
+#    driver: bridge
