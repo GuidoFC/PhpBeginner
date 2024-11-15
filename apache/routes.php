@@ -8,7 +8,8 @@ $router->get('/notes', 'notes/index.php')->only('auth');
 $router->get('/note', 'notes/show.php');
 $router->delete('/note', 'notes/destroy.php');
 
-$router->get('/note/edit', 'notes/edit.php');
+//$router->get('/note/edit', 'notes/edit.php');
+$router->get('/note/edit', 'NotesController@edit');
 $router->patch('/note', 'notes/update.php');
 
 // TODO El profesor quiere que hagamos esto para todas las notas
