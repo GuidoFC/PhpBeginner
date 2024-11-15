@@ -9,6 +9,7 @@ use Core\Validator;
 class NotesController
 {
     // Ya tengo los cambios en mi master!!
+    // git push origin master
     protected $conexionBaseDatos;
     protected $currentUserId;
 
