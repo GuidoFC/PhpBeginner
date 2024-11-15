@@ -2,6 +2,8 @@
 
 namespace Core;
 
+// Empezamos con la tarea
+//  Implementar autentificació i autorització.
 class Authenticator
 {
     public function attempt($email, $password): bool
