@@ -11,6 +11,7 @@ class NotesController
     protected $conexionBaseDatos;
     protected $currentUserId;
 
+    // Aqui estoy aplicando la injeccion de dependencias
     public function __construct($conexionBaseDatos)
     {
         $this->conexionBaseDatos = $conexionBaseDatos;
@@ -19,7 +20,6 @@ class NotesController
 
     public function create()
     {
-        // Mueve el contenido de create.php aquí.
         view("notes/create.view.php", [
             'heading' => 'Create a Note',
             'errors' => []
