@@ -22,7 +22,7 @@ function base_path($path)
 {
     return BASE_PATH . $path;
 }
-function view($path, $attribute = []): void
+function PathGoview($path, $attribute = []): void
 {
     extract($attribute);
     require base_path('views/'. $path);

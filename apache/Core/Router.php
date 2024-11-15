@@ -62,16 +62,20 @@ class Router
             if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
                 Middleware::resolve($route['middleware']);
 
+
                 // TODO: aqui cuando lo encuentras. Y ahora hacemos un metodo
                 if (strpos($route['controller'], "@") !== false) {
                     // Obtengo el metodo que tengo que aplicar
 //                    echo $route['controller'];
+//                    var_dump($route['controller']);
+
                     $parts = explode('@', $route['controller']);
                     $method = $parts[1]; // Esto te dará "el metodo del NotesController"
                     $this->nuevaRutaConArroba($method);
                     exit();
                 }
 //                echo $route['controller'];
+//                var_dump($route['controller']);
                 return require base_path('Http/controllers/' . $route['controller']);
             }
         }
@@ -82,6 +86,15 @@ class Router
     }
 
     public function nuevaRutaConArroba($method){
+//        if($method != "showNote"){
+//            var_dump($method);
+//            echo '<pre>'; // Formatea la salida para mejor legibilidad en un navegador
+//            print_r(debug_backtrace());
+//
+//            echo '</pre>';
+//            exit();
+//        }
+
         $baseDatos = App::resolve(Database::class);
         $notes = new NotesController($baseDatos);
         $notes->$method();

@@ -20,7 +20,7 @@ class NotesController
 
     public function create()
     {
-        view("notes/create.view.php", [
+        PathGoview("notes/create.view.php", [
             'heading' => 'Create a Note',
             'errors' => []
         ]);
@@ -39,6 +39,7 @@ class NotesController
         $this->conexionBaseDatos->query('delete from notes where id = :id', [
             'id' => $_POST['id']
         ]);
+
         header('location: /notes');
         exit();
     }
@@ -48,14 +49,15 @@ class NotesController
 
 
         $currentUserId = 1;
-
+        // De donde coge el ID?
+        // Lo saca del  $_GET['id']
         $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
             ['id' => $_GET['id']
             ])->findOrFail();
 
         authorize($note['user_id'] === $currentUserId);
 
-        view("notes/edit.view.php", [
+        PathGoview("notes/edit.view.php", [
             'heading' => 'Edit a Note',
             'errors' => [],
             'note' => $note
@@ -67,7 +69,7 @@ class NotesController
 
         $notes = $this->conexionBaseDatos->query('select * from notes where user_id = 1')->get();
 
-        view("notes/index.view.php", [
+        PathGoview("notes/index.view.php", [
             'heading' => 'My notes',
             'notes' => $notes
         ]);
@@ -85,7 +87,7 @@ class NotesController
 
         authorize($note['user_id'] === $currentUserId);
 
-        view("notes/show.view.php", [
+        PathGoview("notes/show.view.php", [
             'heading' => 'Note',
             'note' => $note
         ]);
@@ -101,7 +103,7 @@ class NotesController
         }
 
         if (!empty($errors)) {
-            view("notes/create.view.php", [
+            PathGoview("notes/create.view.php", [
                 'heading' => 'Create a Note',
                 'errors' => $errors
             ]);
@@ -131,7 +133,7 @@ class NotesController
             $errors['body'] = 'A body of no more than 100 characters is required';
         }
         if (count($errors)) {
-            view("notes/edit.view.php", [
+            PathGoview("notes/edit.view.php", [
                 'heading' => 'Edit Note',
                 'errors' => $errors,
                 'note' => $note

@@ -1,6 +1,6 @@
 <?php
 
-view("contact.view.php", [
+PathGoview("contact.view.php", [
     'heading' => 'Contact',
 ]);
 

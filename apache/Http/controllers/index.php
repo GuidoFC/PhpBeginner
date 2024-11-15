@@ -1,5 +1,5 @@
 <?php
-view("index.view.php", [
+PathGoview("index.view.php", [
     'heading' => 'Home',
 ]);
 

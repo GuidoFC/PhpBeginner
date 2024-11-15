@@ -1,5 +1,5 @@
 <?php
 
-view("about.view.php", [
+PathGoview("about.view.php", [
     'heading' => 'About',
 ]);

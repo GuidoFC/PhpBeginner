@@ -17,7 +17,12 @@ spl_autoload_register(function ($class) {
 
 require base_path('bootstrap.php');
 
+// Creamos un objeto de la clase Router
 $router = new \Core\Router();
+// TODO que hace aqui?
+//  gracias al require el $routes tendrá acceso a todas las rutas definidas en routes.php.
+//  PEro cuando usamos esta variable $routes
+
 $routes = require base_path('routes.php');
 
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];

@@ -10,4 +10,7 @@ $container->bind('Core\Database', function (){
 
     return new Database($config['database']);
 });
+// Este paso no lo acabo de entender. Lo que hago es crear un contendor
+// con una llave y una funcion de como crear un objeto para tener una conexion a la base de datos
+// luego lo guardamos en la APP para poderlo sacar cuando queramos hacer una conexion en la base de datos
 App::setContainer($container);
