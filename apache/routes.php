@@ -12,8 +12,8 @@ $router->get('/note/edit', 'notes/edit.php');
 $router->patch('/note', 'notes/update.php');
 
 // TODO El profesor quiere que hagamos esto para todas las notas
-//$router->get('/notes/create', 'NotesController@create');
-$router->get('/notes/create', 'notes/create.php');
+$router->get('/notes/create', 'NotesController@create');
+//$router->get('/notes/create', 'notes/create.php');
 $router->post('/notes/create', 'notes/store.php');
 
 $router->get('/register', 'registration/create.php')->only('guest');
