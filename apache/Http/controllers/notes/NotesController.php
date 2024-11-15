@@ -8,6 +8,7 @@ use Core\Validator;
 
 class NotesController
 {
+    // Ya tengo los cambios en mi master
     protected $conexionBaseDatos;
     protected $currentUserId;
 
