@@ -4,18 +4,22 @@ $router->get('/', 'index.php');
 $router->get('/about', 'about.php');
 $router->get('/contact', 'contact.php');
 
-$router->get('/notes', 'notes/index.php')->only('auth');
+//$router->get('/notes', 'notes/index.php')->only('auth');
+$router->get('/notes', 'NotesController@index')->only('auth');
+$router->get('/note', 'NotesController@showNote');
 $router->get('/note', 'notes/show.php');
 $router->delete('/note', 'notes/destroy.php');
 
 //$router->get('/note/edit', 'notes/edit.php');
 $router->get('/note/edit', 'NotesController@edit');
-$router->patch('/note', 'notes/update.php');
+$router->patch('/note', 'NotesController@update');
+//$router->patch('/note', 'notes/update.php');
 
 // TODO El profesor quiere que hagamos esto para todas las notas
 $router->get('/notes/create', 'NotesController@create');
 //$router->get('/notes/create', 'notes/create.php');
-$router->post('/notes/create', 'notes/store.php');
+//$router->post('/notes/create', 'notes/store.php');
+$router->post('/notes/create', 'NotesController@store');
 
 $router->get('/register', 'registration/create.php')->only('guest');
 $router->post('/register', 'registration/store.php');

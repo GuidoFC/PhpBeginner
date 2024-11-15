@@ -65,13 +65,13 @@ class Router
                 // TODO: aqui cuando lo encuentras. Y ahora hacemos un metodo
                 if (strpos($route['controller'], "@") !== false) {
                     // Obtengo el metodo que tengo que aplicar
-                    echo $route['controller'];
+//                    echo $route['controller'];
                     $parts = explode('@', $route['controller']);
                     $method = $parts[1]; // Esto te dará "el metodo del NotesController"
                     $this->nuevaRutaConArroba($method);
                     exit();
                 }
-                echo $route['controller'];
+//                echo $route['controller'];
                 return require base_path('Http/controllers/' . $route['controller']);
             }
         }
@@ -82,7 +82,9 @@ class Router
     }
 
     public function nuevaRutaConArroba($method){
-        NotesController::$method();
+        $baseDatos = App::resolve(Database::class);
+        $notes = new NotesController($baseDatos);
+        $notes->$method();
     }
 
     protected function abort($code = 404)
