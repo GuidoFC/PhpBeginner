@@ -1,14 +1,20 @@
+0. Muestra todas las variables guardadas en $_POST
+    var_dump($_POST);
+
+    // Detiene la ejecución del script
+    die();
+
 1. Si uso una clase, en un sitio especifico tengo que hacerlo de la siguiente manera:
 
-use Http\controllers\notes\NotesController;
+    use Http\controllers\notes\NotesController;
 
-para poder crear un objeto de dicha clase NotesController
+    para poder crear un objeto de dicha clase NotesController
 
 2. Para tener la traza de
- echo '<pre>'; // Formatea la salida para mejor legibilidad en un navegador
-print_r(debug_backtrace());
+     echo '<pre>'; // Formatea la salida para mejor legibilidad en un navegador
+    print_r(debug_backtrace());
 
-echo '</pre>';
+    echo '</pre>';
 
 3. Para coger una parte de un String
-$parts = explode('@', $route['controller']);
+    $parts = explode('@', $route['controller']);
