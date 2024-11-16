@@ -21,20 +21,15 @@ $email = $_POST['email'];
 $password = $_POST['password'];
 
 
-
-
-
-
-
 $errors = [];
 $auth = new Authenticator();
 
 // Validaciones
-if(!Validator::email($email)){
+if (!Validator::email($email)) {
     $errors['email'] = 'Please provide a valid email address.';
 }
 
-if(!Validator::string($password, 7, 255)){
+if (!Validator::string($password, 7, 255)) {
     $errors['password'] = 'Please provide a password of at least seven characters.';
 }
 
@@ -65,7 +60,7 @@ if (!$user) {
 // Usar el servicio para crear un usuario
     $usuarioService->crearUsuario($newUsuario);
 
-    // TODO probamos el metodo
+    // TODO Lo dejo comentado para tenerlo como esquema
 //    $db->query('INSERT INTO users(email, password) VALUES(:email, :password)', [
 //        'email' => $email,
 //        'password' => password_hash($password, PASSWORD_BCRYPT)

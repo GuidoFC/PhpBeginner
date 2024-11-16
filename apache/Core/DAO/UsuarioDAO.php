@@ -2,6 +2,7 @@
 
 namespace Core\DAO;
 
+use Core\Authenticator;
 use Core\interfaces\CrudUsuario;
 use Core\interfaces\Usuario;
 use Core\App;
@@ -23,6 +24,9 @@ class UsuarioDAO implements CrudUsuario
                 'fechaNacimiento' => $crearUsuario->getFechaNacimiento()
             ]
         );
+        // TODO deberia estar en el service
+        $auth = new Authenticator();
+        $auth->login($crearUsuario->getCorreo());
         redirect('/');
     }
 }

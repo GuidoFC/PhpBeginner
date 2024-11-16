@@ -22,10 +22,10 @@ class Authenticator
         }
         return false;
     }
-    public function login($user): void
+    public function login($correo): void
     {
         $_SESSION['user'] = [
-            'email' => $user['email']
+            'email' => $correo
         ];
         session_regenerate_id(true);
         redirect('/');
