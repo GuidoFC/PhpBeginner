@@ -13,40 +13,40 @@ class Router
 {
     protected $routesGuardas = [];
 
-    public function add($method, $uri, $controller)
+    public function add($method, $uri, $Carpetacontroller)
     {
         $this->routesGuardas[] = [
             'uri' => $uri,
-            'controller' => $controller,
+            'controller' => $Carpetacontroller,
             'method' => $method,
             'middleware' => null
         ];
         return $this;
     }
 
-    public function get($uri, $controller)
+    public function get($uri, $Carpetacontroller)
     {
-        return $this->add('GET', $uri, $controller);
+        return $this->add('GET', $uri, $Carpetacontroller);
     }
 
-    public function delete($uri, $controller)
+    public function delete($uri, $Carpetacontroller)
     {
-        return $this->add('DELETE', $uri, $controller);
+        return $this->add('DELETE', $uri, $Carpetacontroller);
     }
 
-    public function post($uri, $controller)
+    public function post($uri, $Carpetacontroller)
     {
-        return $this->add('POST', $uri, $controller);
+        return $this->add('POST', $uri, $Carpetacontroller);
     }
 
-    public function patch($uri, $controller)
+    public function patch($uri, $Carpetacontroller)
     {
-        return $this->add('PATCH', $uri, $controller);
+        return $this->add('PATCH', $uri, $Carpetacontroller);
     }
 
-    public function put($uri, $controller)
+    public function put($uri, $Carpetacontroller)
     {
-        return $this->add('PUT', $uri, $controller);
+        return $this->add('PUT', $uri, $Carpetacontroller);
     }
 
     public function only($key)
