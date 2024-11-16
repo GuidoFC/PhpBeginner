@@ -63,19 +63,18 @@ class Router
                 Middleware::resolve($route['middleware']);
 
 
-                // TODO: aqui cuando lo encuentras. Y ahora hacemos un metodo
+                // TODO: buscamos los controladores que tiene un @
                 if (strpos($route['controller'], "@") !== false) {
-                    // Obtengo el metodo que tengo que aplicar
-//                    echo $route['controller'];
-//                    var_dump($route['controller']);
 
                     $parts = explode('@', $route['controller']);
-                    $method = $parts[1]; // Esto te dará "el metodo del NotesController"
-                    $this->nuevaRutaConArroba($method);
-                    exit();
+                    $functionClass = $parts[1]; // Esto te dará "el metodo del NotesController"
+                    $class  = $parts[0]; // Tengo el nombre del controlador
+                    echo $route['controller'];
+
+
+                    return $this->nuevaRutaConArroba($functionClass, $class);
+
                 }
-//                echo $route['controller'];
-//                var_dump($route['controller']);
                 return require base_path('Http/controllers/' . $route['controller']);
             }
         }
@@ -85,19 +84,20 @@ class Router
         return $this;
     }
 
-    public function nuevaRutaConArroba($method){
-//        if($method != "showNote"){
-//            var_dump($method);
-//            echo '<pre>'; // Formatea la salida para mejor legibilidad en un navegador
-//            print_r(debug_backtrace());
-//
-//            echo '</pre>';
-//            exit();
-//        }
+    public function nuevaRutaConArroba($functionClass, $classControler ){
+
+
+
 
         $baseDatos = App::resolve(Database::class);
-        $notes = new NotesController($baseDatos);
-        $notes->$method();
+        $controlerNote = new NotesController($baseDatos);
+        // TODO lo queria hacer dinamico, pero no funciona, el parametro $classControler no
+        //  me lo interprea como una clase sino como un String
+//        $controllerInstance = new $classControler() ;
+//        dd($controllerInstance);
+
+         return  $controlerNote->$functionClass();
+
     }
 
     protected function abort($code = 404)

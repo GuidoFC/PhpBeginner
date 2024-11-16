@@ -4,6 +4,7 @@ namespace Http\controllers\notes;
 
 use Core\App;
 use Core\Database;
+use Core\model\Nota;
 use Core\Validator;
 
 class NotesController
@@ -98,6 +99,8 @@ class NotesController
     public function store()
     {
 
+
+        $newNote = new Nota();
 
         $errors = [];
         if (!Validator::string($_POST['body'], 1, 100)) {
