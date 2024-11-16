@@ -27,6 +27,11 @@ class UsuarioService
 
         // Usar la instancia de UsuarioDAO inyectada
         $this->usuarioDAO->crearUsuarioBD($usuario);
+
+    }
+
+    private function saveId(){
+
     }
 
     private static function encriptarContrasena($contrasenaSinEncriptar)

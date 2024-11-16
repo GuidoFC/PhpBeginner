@@ -23,6 +23,7 @@ class NotesController
 
     public function create()
     {
+
         PathGoview("notes/create.view.php", [
             'heading' => 'Create a Note',
             'errors' => []
@@ -100,7 +101,7 @@ class NotesController
     {
 
 
-        $newNote = new Nota();
+//        $newNote = new Nota();
 
         $errors = [];
         if (!Validator::string($_POST['body'], 1, 100)) {

@@ -19,14 +19,38 @@ class UsuarioDAO implements CrudUsuario
             'INSERT INTO users (email, password, nombre, fechaNacimiento) VALUES (:email, :password, :nombre, :fechaNacimiento)',
             [
                 'email' => $crearUsuario->getCorreo(),
-                'password' => password_hash($crearUsuario->getContrasena(), PASSWORD_BCRYPT),
+                'password' => $crearUsuario->getContrasena(),
                 'nombre' => $crearUsuario->getNombre(),
                 'fechaNacimiento' => $crearUsuario->getFechaNacimiento()
             ]
         );
         // TODO deberia estar en el service
+
+        $crearUsuario->setId(self::getIdUserCreate($crearUsuario));
         $auth = new Authenticator();
-        $auth->login($crearUsuario->getCorreo());
+
+
+        $auth->login($crearUsuario->getCorreo() , $crearUsuario->getId());
         redirect('/');
+    }
+
+    public static function getIdUserCreate($crearUsuario) : int
+    {
+        $db = App::resolve(Database::class);
+        $email = $crearUsuario->getCorreo();
+
+        // Ejecutar la consulta para obtener el ID del usuario
+        $result = $db->query(
+            'SELECT id FROM users WHERE email = :email',
+            ['email' => $email]
+        );
+
+        // Obtener el ID de la primera fila del resultado
+
+        $idUser = $result->find();
+
+
+        return $idUser["id"];
+
     }
 }
