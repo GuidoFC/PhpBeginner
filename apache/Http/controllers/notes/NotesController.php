@@ -33,7 +33,7 @@ class NotesController
     public function destroy()
     {
 
-        $currentUserId = 1;
+        $currentUserId = $_SESSION['user']['id'];
 
         $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
             ['id' => $_POST['id']])->findOrFail();
@@ -52,7 +52,7 @@ class NotesController
     {
 
 
-        $currentUserId = 1;
+        $currentUserId = $_SESSION['user']['id'];
         // De donde coge el ID?
         // Lo saca del  $_GET['id']
         $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
@@ -71,7 +71,8 @@ class NotesController
     public function index()
     {
 
-        $notes = $this->conexionBaseDatos->query('select * from notes where user_id = 1')->get();
+        $notes = $this->conexionBaseDatos->query('select * from notes where user_id = :idUser',
+        ['idUser' => $_SESSION['user']['id']])->get();
 
         PathGoview("notes/index.view.php", [
             'heading' => 'My notes',
@@ -83,7 +84,7 @@ class NotesController
     {
 
 
-        $currentUserId = 1;
+        $currentUserId = $_SESSION['user']['id'];
 
         $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
             ['id' => $_GET['id']
@@ -116,7 +117,7 @@ class NotesController
         }
         $this->conexionBaseDatos->query('INSERT INTO notes(body, user_id) VALUES(:body, :user_id)', [
             'body' => $_POST['body'],
-            'user_id' => 1
+            'user_id' => $_SESSION['user']['id']
         ]);
         header('location: /notes');
         die();
@@ -126,7 +127,7 @@ class NotesController
     {
 
 
-        $currentUserId = 1;
+        $currentUserId = $_SESSION['user']['id'];
 
         $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
             ['id' => $_POST['id']

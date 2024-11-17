@@ -69,7 +69,7 @@ class Router
                     $parts = explode('@', $route['controller']);
                     $functionClass = $parts[1]; // Esto te dará "el metodo del NotesController"
                     $class  = $parts[0]; // Tengo el nombre del controlador
-                    echo $route['controller'];
+
 
 
                     return $this->nuevaRutaConArroba($functionClass, $class);
