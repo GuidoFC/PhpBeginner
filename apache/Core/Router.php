@@ -88,15 +88,17 @@ class Router
 
 
 
+//      TODO: NO se si crear un contendor es una forma dinamica de hacer esto.
+        $controllerInstance = App::resolve($classControler);
 
-        $baseDatos = App::resolve(Database::class);
-        $controlerNote = new NotesController($baseDatos);
+
+//        $controlerNote = new NotesController($baseDatos);
         // TODO lo queria hacer dinamico, pero no funciona, el parametro $classControler no
         //  me lo interprea como una clase sino como un String
 //        $controllerInstance = new $classControler() ;
 //        dd($controllerInstance);
 
-         return  $controlerNote->$functionClass();
+         return  $controllerInstance->$functionClass();
 
     }
 
