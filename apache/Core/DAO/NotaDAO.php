@@ -10,12 +10,12 @@ class NotaDAO
 {
 
     protected $conexionBaseDatos;
-    protected $currentUserId;
+
 
     public function __construct()
     {
         $this->conexionBaseDatos = App::resolve(Database::class);
-        $this->currentUserId = $_SESSION['user']['id'];
+
     }
 
     public function crearNotaBD(Nota $nota)
@@ -23,7 +23,7 @@ class NotaDAO
 
     }
 
-    public function editarNota($notaId, $currentUserId)
+    public function buscarUnaNota($notaId, $currentUserId)
     {
         // Tengo la info de toda la nota
         $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
@@ -49,6 +49,14 @@ class NotaDAO
         ]);
 
 
+    }
+
+    public function insertNote($NotaModificada, $currentUserId){
+
+        $this->conexionBaseDatos->query('INSERT INTO notes(body, user_id) VALUES(:body, :user_id)', [
+            'body' => $NotaModificada,
+            'user_id' => $currentUserId
+        ]);
     }
 
 }

@@ -51,7 +51,7 @@ class NotesController
         $notaID = $_GET['id'];
 
         $notaService = new NotaService();
-        $getNote =  $notaService->editarNota($notaID);
+        $getNote =  $notaService->obtenerNota($notaID);
 
         PathGoview("notes/edit.view.php", [
             'heading' => 'Edit a Note',
@@ -90,16 +90,15 @@ class NotesController
         ]);
     }
 
+
     public function store()
     {
+        // El mé_todo store() lo que hace es guardar una nota que se ha creado por primera vez!!!
+        $bodyNote = $_POST['body'];
 
+        $notaService = new NotaService();
 
-//        $newNote = new Nota();
-
-        $errors = [];
-        if (!Validator::string($_POST['body'], 1, 100)) {
-            $errors['body'] = 'A body of no more than 100 characters is required';
-        }
+        $errors = $notaService->isNoteBodyValidLength($bodyNote, "Insert");
 
         if (!empty($errors)) {
             PathGoview("notes/create.view.php", [
@@ -107,10 +106,9 @@ class NotesController
                 'errors' => $errors
             ]);
         }
-        $this->conexionBaseDatos->query('INSERT INTO notes(body, user_id) VALUES(:body, :user_id)', [
-            'body' => $_POST['body'],
-            'user_id' => $_SESSION['user']['id']
-        ]);
+
+        $notaService->insertNote($bodyNote);
+
         header('location: /notes');
         die();
     }
@@ -129,7 +127,7 @@ class NotesController
 
         $errors = [];
         if (!Validator::string($_POST['body'], 1, 100)) {
-            $errors['body'] = 'A body of no more than 100 characters is required';
+            $errors['body'] = 'La modicacion de la nota, tiene que tener un cuerpo entre 1 y 100 caracteres';
         }
         if (count($errors)) {
             PathGoview("notes/edit.view.php", [
