@@ -72,11 +72,19 @@ class NotaService
         $notaDAO->updateNota($notaID, $bodyNote ,$this->currentUserId);
     }
 
+    public function getAllNotasCurrentUser()
+    {
+        $notaDAO = new NotaDAO();
+
+        return $notaDAO->getAllNotasCurrentUser($this->currentUserId);
+    }
 
     public function getCurrentUserId(): mixed
     {
         return $this->currentUserId;
     }
+
+
 
 
 }

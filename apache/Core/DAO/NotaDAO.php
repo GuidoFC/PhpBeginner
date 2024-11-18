@@ -18,10 +18,7 @@ class NotaDAO
 
     }
 
-    public function crearNotaBD(Nota $nota)
-    {
 
-    }
 
     public function buscarUnaNota($notaId, $currentUserId)
     {
@@ -66,6 +63,14 @@ class NotaDAO
             'body' => $bodyNote
         ]);
 
+    }
+
+    public function getAllNotasCurrentUser($currentUserId)
+    {
+        $notes = $this->conexionBaseDatos->query('select * from notes where user_id = :idUser',
+            ['idUser' => $currentUserId])->get();
+
+        return $notes;
     }
 
 }

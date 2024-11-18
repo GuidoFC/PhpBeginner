@@ -30,9 +30,6 @@ class UsuarioService
 
     }
 
-    private function saveId(){
-
-    }
 
     private static function encriptarContrasena($contrasenaSinEncriptar)
     {

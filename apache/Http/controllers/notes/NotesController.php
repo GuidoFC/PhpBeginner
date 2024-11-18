@@ -63,12 +63,12 @@ class NotesController
     public function index()
     {
 
-        $notes = $this->conexionBaseDatos->query('select * from notes where user_id = :idUser',
-            ['idUser' => $_SESSION['user']['id']])->get();
+        $notaService = new NotaService();
+        $getNote =  $notaService->getAllNotasCurrentUser();
 
         PathGoview("notes/index.view.php", [
-            'heading' => 'Todas Mis Notas Personales',
-            'notes' => $notes
+            'heading' => 'Todas Mis Notas Personales!!!',
+            'notes' => $getNote
         ]);
     }
 
