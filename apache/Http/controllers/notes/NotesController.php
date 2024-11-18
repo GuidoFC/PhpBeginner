@@ -67,26 +67,24 @@ class NotesController
             ['idUser' => $_SESSION['user']['id']])->get();
 
         PathGoview("notes/index.view.php", [
-            'heading' => 'My notes',
+            'heading' => 'Todas Mis Notas Personales',
             'notes' => $notes
         ]);
     }
 
     public function showNote()
     {
+// TODO coincide con el metodo edit()
 
+        $notaID = $_GET['id'];
 
-        $currentUserId = $_SESSION['user']['id'];
+        $notaService = new NotaService();
+        $getNote =  $notaService->obtenerNota($notaID);
 
-        $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
-            ['id' => $_GET['id']
-            ])->findOrFail();
-
-        authorize($note['user_id'] === $currentUserId);
 
         PathGoview("notes/show.view.php", [
-            'heading' => 'Note',
-            'note' => $note
+            'heading' => 'Mostrando la nota id: ' . $getNote['id'],
+            'note' => $getNote
         ]);
     }
 
