@@ -21,7 +21,7 @@ class NotesController
     public function __construct($conexionBaseDatos)
     {
         $this->conexionBaseDatos = $conexionBaseDatos;
-        $this->currentUserId = $_SESSION['user']['id']; // Esto debería venir de la sesión del usuario en lugar de estar fijo
+        $this->currentUserId = $_SESSION['user']['id'];
     }
 
     public function create()
@@ -41,8 +41,6 @@ class NotesController
         $notaService = new NotaService();
         $notaService->eliminarNota($notaID);
 
-
-// TODO Controler
         header('location: /notes');
         exit();
     }
@@ -50,20 +48,15 @@ class NotesController
     public function edit()
     {
 
+        $notaID = $_GET['id'];
 
-        $currentUserId = $_SESSION['user']['id'];
-        // De donde coge el ID?
-        // Lo saca del  $_GET['id']
-        $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
-            ['id' => $_GET['id']
-            ])->findOrFail();
-
-        authorize($note['user_id'] === $currentUserId);
+        $notaService = new NotaService();
+        $getNote =  $notaService->editarNota($notaID);
 
         PathGoview("notes/edit.view.php", [
             'heading' => 'Edit a Note',
             'errors' => [],
-            'note' => $note
+            'note' => $getNote
         ]);
     }
 

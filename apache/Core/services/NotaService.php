@@ -17,23 +17,22 @@ class NotaService
 
     }
 
-    public function crearNota(Nota $nota)
+    public function editarNota( $notaID)
     {
+        $notaDAO = new NotaDAO();
 
+        $getNote = $notaDAO->editarNota($notaID, $this->currentUserId);
+        return $getNote;
     }
 
-    public function eliminarNota($nota)
+    public function eliminarNota($notaID)
     {
 
-       $notaDAO = new NotaDAO();
+        $notaDAO = new NotaDAO();
 
-       $notaDAO->eliminarNotaBD($nota, $this->currentUserId);
+         $notaDAO->eliminarNotaBD($notaID, $this->currentUserId);
     }
 
-    public function comprobarNotaPropietario($nota) :bool
-    {
-
-    }
 
     public function getCurrentUserId(): mixed
     {
@@ -41,20 +40,6 @@ class NotaService
     }
 
 
-
-
-    public function getIdNota()
-    {
-        return $this->idNota;
-    }
-
-    /**
-     * @param mixed $idNota
-     */
-    public function setIdNota($idNota): void
-    {
-        $this->idNota = $idNota;
-    }
 
 
 
