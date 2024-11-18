@@ -6,7 +6,7 @@ use Core\model\Nota;
 
 class NotaDAO
 {
-    public function crearUsuarioBD(Nota $nota){
+    public function crearNotaBD(Nota $nota){
 
     }
 }

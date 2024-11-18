@@ -20,7 +20,7 @@ class NotesController
     public function __construct($conexionBaseDatos)
     {
         $this->conexionBaseDatos = $conexionBaseDatos;
-        $this->currentUserId = 1; // Esto debería venir de la sesión del usuario en lugar de estar fijo
+        $this->currentUserId = $_SESSION['user']['id']; // Esto debería venir de la sesión del usuario en lugar de estar fijo
     }
 
     public function create()
