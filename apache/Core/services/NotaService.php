@@ -48,7 +48,8 @@ class NotaService
 
         return $errors;
     }
-        public function insertNote($NotaModificada)
+
+    public function insertNote($NotaModificada)
     {
         $notaDAO = new NotaDAO();
 
@@ -61,7 +62,14 @@ class NotaService
 
         $notaDAO = new NotaDAO();
 
-         $notaDAO->eliminarNotaBD($notaID, $this->currentUserId);
+        $notaDAO->eliminarNotaBD($notaID, $this->currentUserId);
+    }
+
+    public function updateNota($notaID, $bodyNote)
+    {
+        $notaDAO = new NotaDAO();
+
+        $notaDAO->updateNota($notaID, $bodyNote ,$this->currentUserId);
     }
 
 
@@ -69,9 +77,6 @@ class NotaService
     {
         return $this->currentUserId;
     }
-
-
-
 
 
 }

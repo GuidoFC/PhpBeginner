@@ -114,30 +114,24 @@ class NotesController
     public function update()
     {
 
+        $notaID = $_POST['id'];
+        $bodyNote = $_POST['body'];
+        $notaService = new NotaService();
 
-        $currentUserId = $_SESSION['user']['id'];
+        $getNote =  $notaService->obtenerNota($notaID);
 
-        $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
-            ['id' => $_POST['id']
-            ])->findOrFail();
-
-        authorize($note['user_id'] === $currentUserId);
-
-        $errors = [];
-        if (!Validator::string($_POST['body'], 1, 100)) {
-            $errors['body'] = 'La modicacion de la nota, tiene que tener un cuerpo entre 1 y 100 caracteres';
-        }
+        $errors = $notaService->isNoteBodyValidLength($bodyNote, "Update");
         if (count($errors)) {
             PathGoview("notes/edit.view.php", [
                 'heading' => 'Edit Note',
                 'errors' => $errors,
-                'note' => $note
+                'note' => $getNote
             ]);
         }
-        $this->conexionBaseDatos->query('update notes set body = :body where id = :id', [
-            'id' => $_POST['id'],
-            'body' => $_POST['body']
-        ]);
+
+        $notaService->updateNota($notaID, $bodyNote);
+
+
 
         header('location: /notes');
         die();

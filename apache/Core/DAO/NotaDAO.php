@@ -59,4 +59,13 @@ class NotaDAO
         ]);
     }
 
+    public function updateNota($notaID, $bodyNote ,$currentUserId){
+
+        $this->conexionBaseDatos->query('update notes set body = :body where id = :id', [
+            'id' => $notaID,
+            'body' => $bodyNote
+        ]);
+
+    }
+
 }
