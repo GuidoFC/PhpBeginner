@@ -10,7 +10,8 @@ use Core\Database;
 
 class UsuarioDAO implements CrudUsuario
 {
-
+// email: 19@gmail.com
+// contra 123456789
 
     public function crearUsuarioBD(Usuario|\Core\model\Usuario $crearUsuario)
     {

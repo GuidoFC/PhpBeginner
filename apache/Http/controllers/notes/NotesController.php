@@ -5,6 +5,7 @@ namespace Http\controllers\notes;
 use Core\App;
 use Core\Database;
 use Core\model\Nota;
+use Core\services\NotaService;
 use Core\Validator;
 
 class NotesController
@@ -35,17 +36,13 @@ class NotesController
     public function destroy()
     {
 
-        $currentUserId = $_SESSION['user']['id'];
+        $notaID = $_POST['id'];
 
-        $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
-            ['id' => $_POST['id']])->findOrFail();
+        $notaService = new NotaService();
+        $notaService->eliminarNota($notaID);
 
-        authorize($note['user_id'] === $currentUserId);
-//form was submitted. delete the current note.
-        $this->conexionBaseDatos->query('delete from notes where id = :id', [
-            'id' => $_POST['id']
-        ]);
 
+// TODO Controler
         header('location: /notes');
         exit();
     }
@@ -74,7 +71,7 @@ class NotesController
     {
 
         $notes = $this->conexionBaseDatos->query('select * from notes where user_id = :idUser',
-        ['idUser' => $_SESSION['user']['id']])->get();
+            ['idUser' => $_SESSION['user']['id']])->get();
 
         PathGoview("notes/index.view.php", [
             'heading' => 'My notes',
@@ -152,7 +149,7 @@ class NotesController
             'id' => $_POST['id'],
             'body' => $_POST['body']
         ]);
-        echo header('location: /notes');
+
         header('location: /notes');
         die();
     }
