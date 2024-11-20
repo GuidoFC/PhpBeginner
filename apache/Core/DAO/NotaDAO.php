@@ -4,9 +4,10 @@ namespace Core\DAO;
 
 use Core\App;
 use Core\Database;
+use Core\interfaces\CrudNota;
 use Core\model\Nota;
 
-class NotaDAO
+class NotaDAO implements CrudNota
 {
 
     protected $conexionBaseDatos;
@@ -56,7 +57,7 @@ class NotaDAO
         ]);
     }
 
-    public function updateNota($notaID, $bodyNote ,$currentUserId){
+    public function updateNota($notaID, $bodyNote){
 
         $this->conexionBaseDatos->query('update notes set body = :body where id = :id', [
             'id' => $notaID,
