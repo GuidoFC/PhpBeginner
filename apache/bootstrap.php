@@ -4,7 +4,7 @@ use Core\App;
 use Core\Container;
 use Core\Database;
 use Http\controllers\notes\NotesController;
-use \Core\DAO\NotaDAO;
+use \Core\DAO\NotaDAOImplMySql;
 use \Core\services\NotaService;
 
 $container = new Container();
@@ -32,7 +32,7 @@ App::setContainer($container);
 
 // TODO tiene sentido hacer estos contendores?
 $container->bind('Core\DAO\NotesDAO', function (){
-    return new NotaDAO(App::resolve("Core\Database"));
+    return new NotaDAOImplMySql(App::resolve("Core\Database"));
 });
 
 $container->bind('Core\Services\NoteService', function (){

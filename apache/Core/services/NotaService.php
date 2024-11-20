@@ -2,7 +2,7 @@
 
 namespace Core\services;
 
-use Core\DAO\NotaDAO;
+use Core\DAO\NotaDAOImplMySql;
 use Core\model\Nota;
 use Core\Validator;
 
@@ -20,7 +20,7 @@ class NotaService
 
     public function obtenerNota($notaID)
     {
-        $notaDAO = new NotaDAO();
+        $notaDAO = new NotaDAOImplMySql();
 
         $getNote = $notaDAO->buscarUnaNota($notaID, $this->currentUserId);
         return $getNote;
@@ -51,7 +51,8 @@ class NotaService
 
     public function insertNote($NotaModificada)
     {
-        $notaDAO = new NotaDAO();
+        // TODO donde es crear el objeto $notaDAO
+        $notaDAO = new NotaDAOImplMySql();
 
         $notaDAO->insertNote($NotaModificada, $this->currentUserId);
 
@@ -60,21 +61,21 @@ class NotaService
     public function eliminarNota($notaID)
     {
 
-        $notaDAO = new NotaDAO();
+        $notaDAO = new NotaDAOImplMySql();
 
         $notaDAO->eliminarNotaBD($notaID, $this->currentUserId);
     }
 
     public function updateNota($notaID, $bodyNote)
     {
-        $notaDAO = new NotaDAO();
+        $notaDAO = new NotaDAOImplMySql();
 
         $notaDAO->updateNota($notaID, $bodyNote ,$this->currentUserId);
     }
 
     public function getAllNotasCurrentUser()
     {
-        $notaDAO = new NotaDAO();
+        $notaDAO = new NotaDAOImplMySql();
 
         return $notaDAO->getAllNotasCurrentUser($this->currentUserId);
     }

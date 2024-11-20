@@ -7,7 +7,7 @@ use Core\Database;
 use Core\interfaces\CrudNota;
 use Core\model\Nota;
 
-class NotaDAO implements CrudNota
+class NotaDAOImplMySql implements CrudNota
 {
 
     protected $conexionBaseDatos;
