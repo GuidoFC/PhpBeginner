@@ -10,6 +10,7 @@ use Core\Database;
 
 class UsuarioDAO implements CrudUsuario
 {
+    // email: guido@gmail.com
 // email: 19@gmail.com
 // contra 123456789
 

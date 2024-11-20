@@ -9,23 +9,23 @@ $router->get('/contact', 'contact.php');
 
 //$router->get('/notes', 'notes/index.php')->only('auth');
 $router->get('/notes', 'NotesController@index')->only('auth');
-$router->get('/note', 'NotesController@showNote');
+$router->get('/note', 'NotesController@showNote')->only('auth');
 
 // TODO Como se hace para eliminar una nota, sin coger el id
 //  luego en el metodo destroy usa una variable $_POST['id']
-$router->post('/note/borrarNota', 'NotesController@destroy');
+$router->post('/note/borrarNota', 'NotesController@destroy')->only('auth');
 
 //$router->get('/note/edit', 'notes/edit.php');
-$router->get('/note/edit', 'NotesController@edit');
+$router->get('/note/edit', 'NotesController@edit')->only('auth');
 
-$router->patch('/note', 'NotesController@update');
+$router->patch('/note', 'NotesController@update')->only('auth');
 //$router->patch('/note', 'notes/update.php');
 
 // TODO El profesor quiere que hagamos esto: @ para todas las notas
-$router->get('/notes/create', 'NotesController@create');
+$router->get('/notes/create', 'NotesController@create')->only('auth');
 //$router->get('/notes/create', 'notes/create.php');
 //$router->post('/notes/create', 'notes/store.php');
-$router->post('/notes/create', 'NotesController@store');
+$router->post('/notes/create', 'NotesController@store')->only('auth');
 
 $router->get('/register', 'registration/create.php')->only('guest');
 $router->post('/register', 'registration/store.php');
