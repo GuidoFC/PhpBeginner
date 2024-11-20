@@ -10,7 +10,7 @@ $router->get('/contact', 'contact.php');
 //$router->get('/notes', 'notes/index.php')->only('auth');
 $router->get('/notes', 'NotesController@index')->only('auth');
 $router->get('/note', 'NotesController@showNote');
-$router->get('/note', 'notes/show.php');
+
 // TODO Como se hace para eliminar una nota, sin coger el id
 //  luego en el metodo destroy usa una variable $_POST['id']
 $router->post('/note/borrarNota', 'NotesController@destroy');
