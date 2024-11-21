@@ -3,6 +3,7 @@
 namespace Http\controllers\notes;
 
 use Core\App;
+use Core\DAO\NotaDAOImplMySql;
 use Core\Database;
 use Core\model\Nota;
 use Core\services\NotaService;
@@ -37,8 +38,9 @@ class NotesController
     {
 
         $notaID = $_POST['id'];
+        $notaDAO = new NotaDAOImplMySql();
 
-        $notaService = new NotaService();
+        $notaService = new NotaService($notaDAO);
         $notaService->eliminarNota($notaID);
 
         header('location: /notes');
@@ -49,8 +51,9 @@ class NotesController
     {
 
         $notaID = $_GET['id'];
+        $notaDAO = new NotaDAOImplMySql();
+        $notaService = new NotaService($notaDAO);
 
-        $notaService = new NotaService();
         $getNote =  $notaService->obtenerNota($notaID);
 
         PathGoview("notes/edit.view.php", [
@@ -63,7 +66,8 @@ class NotesController
     public function index()
     {
 
-        $notaService = new NotaService();
+        $notaDAO = new NotaDAOImplMySql();
+        $notaService = new NotaService($notaDAO);
         $getNote =  $notaService->getAllNotasCurrentUser();
 
         PathGoview("notes/index.view.php", [
@@ -78,7 +82,8 @@ class NotesController
 
         $notaID = $_GET['id'];
 
-        $notaService = new NotaService();
+        $notaDAO = new NotaDAOImplMySql();
+        $notaService = new NotaService($notaDAO);
         $getNote =  $notaService->obtenerNota($notaID);
 
 
@@ -94,7 +99,8 @@ class NotesController
         // El mé_todo store() lo que hace es guardar una nota que se ha creado por primera vez!!!
         $bodyNote = $_POST['body'];
 
-        $notaService = new NotaService();
+        $notaDAO = new NotaDAOImplMySql();
+        $notaService = new NotaService($notaDAO);
 
         $errors = $notaService->isNoteBodyValidLength($bodyNote, "Insert");
 
@@ -116,7 +122,8 @@ class NotesController
 
         $notaID = $_POST['id'];
         $bodyNote = $_POST['body'];
-        $notaService = new NotaService();
+        $notaDAO = new NotaDAOImplMySql();
+        $notaService = new NotaService($notaDAO);
 
         $getNote =  $notaService->obtenerNota($notaID);
 
