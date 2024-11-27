@@ -55,4 +55,33 @@ class UsuarioDAO implements CrudUsuario
         return $idUser["id"];
 
     }
+
+    public function storeTokenInDatabase($userId, $token): void
+    {
+        $db = App::resolve(Database::class); // Instancia de tu clase de base de datos
+        $db->query("UPDATE users SET api_token = :token WHERE id = :id", [
+            'token' => $token,
+            'id' => $userId
+        ]);
+    }
+
+    function validateApiToken($providedToken)
+    {
+        $db = App::resolve(Database::class); // Instancia de tu clase de base de datos
+        $sql = "SELECT id FROM users WHERE api_token = :token";
+        $user = $db->query($sql, ['token' => $providedToken]);
+
+        if (!$user) {
+            http_response_code(401); // Unauthorized
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Token inválido o expirado'
+            ]);
+            exit();
+        }
+
+        // El token es válido, puedes continuar
+        return $user;
+    }
+
 }

@@ -59,7 +59,9 @@ class Router
     {
 
         foreach ($this->routesGuardas as $route) {
+
             if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
+
                 Middleware::resolve($route['middleware']);
 
 

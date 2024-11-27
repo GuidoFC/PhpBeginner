@@ -32,4 +32,7 @@ $router->post('/register', 'registration/store.php');
 
 $router->get('/login', 'session/create.php')->only('guest');
 $router->post('/session', 'session/store.php')->only('guest');
-$router->delete('/session', 'session/destroy.php')->only('auth');
+$router->delete('/session', 'session/destroy.php');
+
+// Rutas para Api
+$router->post('/api/login', 'UserApiController@loginUser');

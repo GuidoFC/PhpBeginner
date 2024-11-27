@@ -12,7 +12,7 @@ class Container
     public function resolve($key)
     {
         if (!array_key_exists($key, $this->bindings)){
-            throw new \Exception("No matching binding found for {$key}");
+            throw new \Exception("No se encontró ningún enlace coincidente para {$key}");
         }
             $resolver = $this->bindings[$key];
             return call_user_func($resolver);
