@@ -8,7 +8,7 @@ namespace Http\controllers;
 use Core\App;
 use Core\DAO\UsuarioDAO;
 use Core\Database;
-use Http\controllers\notes\PDOException;
+
 
 class UserApiController
 
@@ -81,7 +81,6 @@ class UserApiController
         $token = bin2hex(random_bytes(32));
 
 
-
         // Guardar el token en la base de datos
 
         $UsuarioDAO = new UsuarioDAO();
@@ -91,7 +90,7 @@ class UserApiController
         http_response_code(200);
         echo json_encode([
             'message' => 'User successfully logged in',
-            'access_token' => $token,
+            'access_token_guardalo' => $token,
         ]);
         exit;
     }

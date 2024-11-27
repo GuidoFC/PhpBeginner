@@ -7,6 +7,7 @@ use Core\Database;
 use Core\services\NotaService;
 use Http\controllers\notes\NotesController;
 use Http\controllers\UserApiController;
+use Http\controllers\NotesApiController;
 
 // Solo hay que Crear un contenedor
 $container = new Container();
@@ -30,6 +31,10 @@ $container->bind('NotesController', function () {
 
 $container->bind('UserApiController', function () {
     return new UserApiController();
+});
+
+$container->bind('NotesApiController', function () {
+    return new NotesApiController();
 });
 
 
