@@ -1,6 +1,7 @@
 RewriteEngine On
 RewriteBase /
 
+#DirectoryIndex /public/contador.php
 DirectoryIndex /public/index.php
 
 RewriteCond %{REQUEST_FILENAME} !-f

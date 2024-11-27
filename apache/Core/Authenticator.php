@@ -4,6 +4,8 @@ namespace Core;
 
 // Empezamos con la tarea
 //  Implementar autentificació i autorització.
+use Core\DAO\UsuarioDAO;
+
 class Authenticator
 {
     public function attempt($email, $password): bool
@@ -32,10 +34,23 @@ class Authenticator
 
     public function login($email, $id): void
     {
+        // Genera un token único
+        $token = bin2hex(random_bytes(32));
+
+
+
         $_SESSION['user'] = [
             'email' => $email,
-            'id' => $id
+            'id' => $id,
+            'token' => $token
         ];
+
+
+        // Guarda el token en la base de datos para asociarlo al usuario
+
+        $UsuarioDAO = new UsuarioDAO();
+        $UsuarioDAO->storeTokenInDatabase($id, $token);
+
 //        dd($_SESSION['user']);
 
         session_regenerate_id(true);
