@@ -41,6 +41,37 @@ class NotesApiController
             exit;
         }
 
+        // Obtener el token del encabezado Authorization
+        $headers = getallheaders();
+        $getToken = $headers['Authorization'] ?? null;
+
+        if (!$getToken) {
+            http_response_code(401);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Token no proporcionado',
+            ]);
+            return;
+        }
+
+        // Validar el token y obtener el usuario
+        $usuarioDAO = new UsuarioDAO();
+
+        $user =  $usuarioDAO->validateApiToken($getToken);
+
+
+
+
+        if (!$user) {
+            http_response_code(403);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Token invalido, no pertenece a su cuenta',
+            ]);
+            return;
+        }
+
+
         $notaID = $_GET['id'] ?? null;
 
 
@@ -54,6 +85,7 @@ class NotesApiController
         }
 
 
+
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
 
@@ -64,10 +96,13 @@ class NotesApiController
             http_response_code(404);
             echo json_encode([
                 'status' => 'error',
-                'message' => 'Nota no encontrada'
+                'message' => 'No tienes permiso para ver esta nota',
             ]);
             return;
         }
+
+
+
 
 
         // Responder en JSON
