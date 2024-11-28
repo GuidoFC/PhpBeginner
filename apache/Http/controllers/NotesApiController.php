@@ -54,15 +54,15 @@ class NotesApiController
         // Validar el token y obtener el usuario
         $usuarioDAO = new UsuarioDAO();
 
-        $user = $usuarioDAO->validateApiToken($getToken);
+        $user = $usuarioDAO->getUserByApiToken($getToken);
 
         $this->verifyUserWithToken($user);
 
 
-        $notaID = $this->getIdNote();
+        $notaID = $this->getNoteIdFromRequest();
 
 
-        $this->validateNoteIdPresence($notaID);
+        $this->validateNoteIdFromRequest($notaID);
 
 
         $notaDAO = new NotaDAOImplMySql();
