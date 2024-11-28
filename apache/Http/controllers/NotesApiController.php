@@ -74,8 +74,6 @@ class NotesApiController
         $this->validateIDNoteBaseDates($getNote);
 
 
-
-
         $this->verifyNoteOwnership($getNote, $user);
 
 
@@ -90,6 +88,32 @@ class NotesApiController
             'data' => $getNote,
         ]);
         exit;
+    }
+
+    public function updateNote()
+    {
+
+        // Obtener el token del encabezado Authorization
+        $headers = getallheaders();
+        $getToken = $headers['Authorization'] ?? null;
+
+        // Validar la presencia del token
+        $this->verifyTokenPresence($getToken);
+
+        // Validar el token y obtener el usuario
+        $usuarioDAO = new UsuarioDAO();
+        $user = $usuarioDAO->getUserByApiToken($getToken);
+
+
+        // Verificar que el usuario sea válido
+        $this->verifyUserWithToken($user);
+
+        // Obtener el ID de la nota desde la solicitud
+        $notaID = $this->getNoteIdFromRequest();
+        $this->validateNoteIdFromRequest($notaID);
+
+        // TODO Aqui empieza el problema
+
     }
 
     private function verifyTokenPresence($getToken)
