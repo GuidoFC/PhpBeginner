@@ -71,20 +71,12 @@ class NotesApiController
         $getNote = $notaService->obtenerNota($notaID);
 
 
-
         $this->validateIDNoteBaseDates($getNote);
 
 
-        // TODO refactorizar
-        // Verificar si la nota pertenece al usuario
-        if ($getNote['user_id'] !== $user['id']) {
-            http_response_code(403);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'No tienes permiso para ver esta nota',
-            ]);
-            return;
-        }
+
+
+        $this->verifyNoteOwnership($getNote, $user);
 
 
         // Responder en JSON
@@ -131,6 +123,14 @@ class NotesApiController
     {
         if (!$getNote) {
             $this->sendErrorResponse(403, 'Nota no encontrada en base Datos, verifique id nota');
+        }
+    }
+
+    private function verifyNoteOwnership($getNote, $user)
+    {
+        // Verificar si la nota pertenece al usuario
+        if ($getNote['user_id'] !== $user['id']) {
+            $this->sendErrorResponse(403, 'Este usuario no tienes permiso para ver esta nota');
         }
     }
 
