@@ -79,12 +79,17 @@ class NotesApiController
         $this->verifyNoteOwnership($getNote, $user);
 
 
-        // Responder en JSON
+        // Enviar mensaje de resupuesta si es exitoso la peticion
+        http_response_code(200);
+        // enviar una respuesta HTTP con contenido en formato JSON
+        // header: Informa al cliente (por ejemplo, un navegador web o una aplicación)
+        // que el contenido que se enviará está en formato JSON
         header('Content-Type: application/json');
         echo json_encode([
             'status' => 'success',
             'data' => $getNote,
         ]);
+        exit;
     }
 
     private function verifyTokenPresence($getToken)
