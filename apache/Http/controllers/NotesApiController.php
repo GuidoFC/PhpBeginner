@@ -71,9 +71,22 @@ class NotesApiController
 
         $getNote = $notaService->obtenerNota($notaID);
 
+        // TODO si doy una nota de id desconodico, no me lo pilla
+
 
         if (!$getNote) {
             http_response_code(404);
+            echo json_encode([
+                'status' => 'error',
+                'message' => 'Nota no encontrada con ese ID proporcionado'
+            ]);
+            return;
+        }
+
+
+        // Verificar si la nota pertenece al usuario
+        if ($getNote['user_id'] !== $user['id']) {
+            http_response_code(403);
             echo json_encode([
                 'status' => 'error',
                 'message' => 'No tienes permiso para ver esta nota',

@@ -23,12 +23,12 @@ class NotaDAOImplMySql implements CrudNota
 
     public function buscarUnaNota($notaId, $currentUserId)
     {
-        // Tengo la info de toda la nota
-        $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
-            ['id' => $notaId
-            ])->findOrFail();
-
-        authorize($note['user_id'] === $currentUserId);
+        $note = null;
+        try {
+            // Tengo la info de toda la nota
+            $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
+                ['id' => $notaId
+                ])->find();
 
         return $note;
     }
