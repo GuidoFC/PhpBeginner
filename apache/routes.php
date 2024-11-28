@@ -36,4 +36,6 @@ $router->delete('/session', 'session/destroy.php');
 
 // Rutas para Api
 $router->post('/api/login', 'UserApiController@loginUser');
+
 $router->get('/api/oneNote', 'NotesApiController@getNote');
+$router->put('/api/updateNote', 'NotesApiController@updateNote');

@@ -108,12 +108,56 @@ class NotesApiController
         // Verificar que el usuario sea válido
         $this->verifyUserWithToken($user);
 
-        // Obtener el ID de la nota desde la solicitud
-        $notaID = $this->getNoteIdFromRequest();
-        $this->validateNoteIdFromRequest($notaID);
+        // Obtener el ID  y Body de la nota desde la solicitud
+        $dataFromJson = json_decode(file_get_contents('php://input'), true);
 
-        // TODO Aqui empieza el problema
 
+        if (!$dataFromJson) {
+            $this->sendErrorResponse(400, 'Los campos {idNota} y {body} son obligatorios');
+        }
+
+        if (!$dataFromJson || !isset($dataFromJson['idNota'])) {
+            $this->sendErrorResponse(400, 'El campo {idNota} es obligatorio');
+        }
+
+        if (!$dataFromJson || !isset($dataFromJson['body'])) {
+            $this->sendErrorResponse(400, 'El campo {body} es obligatorio');
+        }
+
+
+        // Verificar si la nota existe
+        $notaDAO = new NotaDAOImplMySql();
+        $notaService = new NotaService($notaDAO);
+
+
+        $note = $notaService->obtenerNota($dataFromJson['idNota']);
+
+
+        $this->validateIDNoteBaseDates($note);
+
+        // Verificar que la nota pertenezca al usuario
+        $this->verifyNoteOwnership($note, $user);
+
+
+        // Actualizar la nota
+        $notaService->updateNota($note["id"],  $dataFromJson['body']);
+
+
+
+        // Todo tengo que ver como solucionar si no se actualiza la nota
+//        if (!$updatedNote) {
+//            $this->sendErrorResponse(500, 'Error al actualizar la nota');
+//        }
+
+        // Enviar respuesta de éxito
+        http_response_code(200);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'success',
+            'message' => 'Nota actualizada correctamente',
+            'data' => $dataFromJson,
+        ]);
+        exit;
     }
 
     private function verifyTokenPresence($getToken)
