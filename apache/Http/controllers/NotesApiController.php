@@ -62,7 +62,6 @@ class NotesApiController
         $notaID = $this->getIdNote();
 
 
-        // TODO refactorizar
         $this->validateNoteIdPresence($notaID);
 
 
@@ -71,19 +70,12 @@ class NotesApiController
 
         $getNote = $notaService->obtenerNota($notaID);
 
-        // TODO si doy una nota de id desconodico, no me lo pilla
 
 
-        if (!$getNote) {
-            http_response_code(404);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Nota no encontrada con ese ID proporcionado'
-            ]);
-            return;
-        }
+        $this->validateIDNoteBaseDates($getNote);
 
 
+        // TODO refactorizar
         // Verificar si la nota pertenece al usuario
         if ($getNote['user_id'] !== $user['id']) {
             http_response_code(403);
@@ -126,6 +118,28 @@ class NotesApiController
         if (!$user) {
             $this->sendErrorResponse(403, 'Token invalido, no pertenece a su cuenta');
         }
+    }
+
+    public function validateNoteIdPresence($notaID)
+    {
+        if (!$notaID) {
+            $this->sendErrorResponse(403, 'Se requiere el id de la nota como Parametro, ej: ?id=40');
+        }
+    }
+
+    private function validateIDNoteBaseDates($getNote)
+    {
+        if (!$getNote) {
+            $this->sendErrorResponse(403, 'Nota no encontrada en base Datos, verifique id nota');
+        }
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getIdNote(): mixed
+    {
+        return $_GET['id'] ?? null;
     }
 }
 
