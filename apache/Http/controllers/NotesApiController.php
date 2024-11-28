@@ -117,7 +117,7 @@ class NotesApiController
         }
     }
 
-    public function validateNoteIdPresence($notaID)
+    public function validateNoteIdFromRequest($notaID)
     {
         if (!$notaID) {
             $this->sendErrorResponse(403, 'Se requiere el id de la nota como Parametro, ej: ?id=40');
