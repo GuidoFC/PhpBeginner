@@ -142,7 +142,7 @@ class NotesApiController
     /**
      * @return mixed|null
      */
-    public function getIdNote(): mixed
+    public function getNoteIdFromRequest(): mixed
     {
         return $_GET['id'] ?? null;
     }
