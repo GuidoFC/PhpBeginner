@@ -59,17 +59,11 @@ class NotesApiController
         $this->verifyUserWithToken($user);
 
 
-        $notaID = $_GET['id'] ?? null;
+        $notaID = $this->getIdNote();
 
 
-        if (!$notaID) {
-            http_response_code(400);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Se requiere el ID de la nota'
-            ]);
-            return;
-        }
+        // TODO refactorizar
+        $this->validateNoteIdPresence($notaID);
 
 
         $notaDAO = new NotaDAOImplMySql();
