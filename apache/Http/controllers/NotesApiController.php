@@ -34,6 +34,8 @@ class NotesApiController
     {
 
         // Verificar si la solicitud es GET
+        // Creo que no es necesario porque en routes
+        // espefico que tiene q ser por GET la peticion
 
         if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
             http_response_code(405);
@@ -45,31 +47,16 @@ class NotesApiController
         $headers = getallheaders();
         $getToken = $headers['Authorization'] ?? null;
 
-        if (!$getToken) {
-            http_response_code(401);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Token no proporcionado',
-            ]);
-            return;
-        }
+
+        $this->verifyTokenPresence($getToken);
+
 
         // Validar el token y obtener el usuario
         $usuarioDAO = new UsuarioDAO();
 
-        $user =  $usuarioDAO->validateApiToken($getToken);
+        $user = $usuarioDAO->validateApiToken($getToken);
 
-
-
-
-        if (!$user) {
-            http_response_code(403);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Token invalido, no pertenece a su cuenta',
-            ]);
-            return;
-        }
+        $this->verifyUserWithToken($user);
 
 
         $notaID = $_GET['id'] ?? null;
@@ -83,7 +70,6 @@ class NotesApiController
             ]);
             return;
         }
-
 
 
         $notaDAO = new NotaDAOImplMySql();
@@ -102,15 +88,37 @@ class NotesApiController
         }
 
 
-
-
-
         // Responder en JSON
         header('Content-Type: application/json');
         echo json_encode([
             'status' => 'success',
             'data' => $getNote,
         ]);
+    }
+
+    private function verifyTokenPresence($getToken)
+    {
+        if (!$getToken) {
+            $this->sendErrorResponse(401, 'Token no proporcionado');
+        }
+    }
+
+    private function sendErrorResponse($statusCode, $message)
+    {
+        http_response_code($statusCode);
+        echo json_encode([
+            'status' => 'error',
+            'message' => $message,
+        ]);
+        // Detiene la ejecución después de enviar la respuesta.
+        exit;
+    }
+
+    private function verifyUserWithToken($user)
+    {
+        if (!$user) {
+            $this->sendErrorResponse(403, 'Token invalido, no pertenece a su cuenta');
+        }
     }
 }
 
