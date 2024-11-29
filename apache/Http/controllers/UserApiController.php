@@ -99,7 +99,7 @@ class UserApiController
 
     private  function encriptarToken($TokenSinEncriptar)
     {
-        return password_hash($TokenSinEncriptar + "sal", PASSWORD_BCRYPT);
+        return password_hash($TokenSinEncriptar . "sal", PASSWORD_BCRYPT);
     }
 }
 
