@@ -80,11 +80,13 @@ class UserApiController
         // Generar el token único
         $token = bin2hex(random_bytes(32));
 
+        // encriptar el token
+        $tokenEncriptado =  $this->encriptarToken($token);
 
         // Guardar el token en la base de datos
 
         $UsuarioDAO = new UsuarioDAO();
-        $UsuarioDAO->storeTokenInDatabase($user['id'], $token);
+        $UsuarioDAO->storeTokenInDatabase($user['id'], $tokenEncriptado);
 
         // Responder con el token
         http_response_code(200);
@@ -93,6 +95,11 @@ class UserApiController
             'access_token_guardalo' => $token,
         ]);
         exit;
+    }
+
+    private  function encriptarToken($TokenSinEncriptar)
+    {
+        return password_hash($TokenSinEncriptar + "sal", PASSWORD_BCRYPT);
     }
 }
 
