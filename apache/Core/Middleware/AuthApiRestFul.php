@@ -8,6 +8,19 @@ use Core\Database;
 
 class AuthApiRestFul
 {
+    private static $authenticatedUser = null;
+
+    public static function setAuthenticatedUser($user)
+    {
+        // recuerda que self hace referencia a la clase actual, se usa en metodos estaticos o variables estaticas
+        self::$authenticatedUser = $user;
+    }
+
+    public static function getAuthenticatedUser()
+    {
+        return self::$authenticatedUser;
+    }
+
     public function handle()
     {
         // Obtener el token del encabezado Authorization
@@ -56,6 +69,8 @@ class AuthApiRestFul
         if (!password_verify($getToken . "sal", $user['api_token'])) {
             $this->sendErrorResponse(401, 'Token de seguridad no válido para este Usuario');
         }
+
+        self::setAuthenticatedUser($user); // Guardar usuario autenticado
 
 
     }

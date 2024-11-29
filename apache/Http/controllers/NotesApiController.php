@@ -33,16 +33,7 @@ class NotesApiController
     public function getNote()
     {
 
-        $input = file_get_contents("php://input");
-        $req = json_decode($input, true);
-
-        // Verificar las credenciales del usuario
-        $user = App::resolve(Database::class)
-            ->query('select * from users where email = :email', [
-                ':email' => $req['email']
-            ])->find();
-
-
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
 
         $notaID = $this->getNoteIdFromRequest();
 
@@ -59,7 +50,7 @@ class NotesApiController
         $this->validateIDNoteBaseDates($getNote);
 
 
-        $this->verifyNoteOwnership($getNote, $user);
+        $this->verifyNoteOwnership($getNote, $authenticatedUser);
 
 
         // Enviar mensaje de resupuesta si es exitoso la peticion
