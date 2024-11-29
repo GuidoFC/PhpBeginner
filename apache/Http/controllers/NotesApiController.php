@@ -29,34 +29,19 @@ class NotesApiController
         }
     }
 
-    // Función para manejar el inicio de sesión
+    // Todo me falta: Eliminar nota, crear nota
     public function getNote()
     {
 
-        // Verificar si la solicitud es GET
-        // Creo que no es necesario porque en routes
-        // espefico que tiene q ser por GET la peticion
+        $input = file_get_contents("php://input");
+        $req = json_decode($input, true);
 
-        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-            http_response_code(405);
-            echo json_encode(['message' => 'Metodo no permitido']);
-            exit;
-        }
+        // Verificar las credenciales del usuario
+        $user = App::resolve(Database::class)
+            ->query('select * from users where email = :email', [
+                ':email' => $req['email']
+            ])->find();
 
-        // Obtener el token del encabezado Authorization
-        $headers = getallheaders();
-        $getToken = $headers['Authorization'] ?? null;
-
-
-        $this->verifyTokenPresence($getToken);
-
-
-        // Validar el token y obtener el usuario
-        $usuarioDAO = new UsuarioDAO();
-
-        $user = $usuarioDAO->getUserByApiToken($getToken);
-
-        $this->verifyUserWithToken($user);
 
 
         $notaID = $this->getNoteIdFromRequest();

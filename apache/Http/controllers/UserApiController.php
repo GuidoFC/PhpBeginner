@@ -81,7 +81,7 @@ class UserApiController
         $token = bin2hex(random_bytes(32));
 
         // encriptar el token
-        $tokenEncriptado =  $this->encriptarToken($token);
+        $tokenEncriptado =  $this->encriptarToken($token . "sal");
 
         // Guardar el token en la base de datos
 
@@ -99,7 +99,7 @@ class UserApiController
 
     private  function encriptarToken($TokenSinEncriptar)
     {
-        return password_hash($TokenSinEncriptar . "sal", PASSWORD_BCRYPT);
+        return password_hash($TokenSinEncriptar, PASSWORD_BCRYPT);
     }
 }
 
