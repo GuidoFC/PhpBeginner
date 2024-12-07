@@ -30,6 +30,8 @@ class NotesController
 
         if ($authenticatedUser == null) {
             $this->currentUserId = $_SESSION['user']['id'];
+        }else{
+            $this->currentUserId = $authenticatedUser['id'];
         }
 
     }
@@ -46,14 +48,60 @@ class NotesController
     public function destroy()
     {
 
-        $notaID = $_POST['id'];
+        // Verificar si el usuario está autenticado
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
+
+        // Obtener el ID de la nota desde la solicitud
+        if ($authenticatedUser) {
+            // En caso de API, obtener el ID del cuerpo de la solicitud
+            $input = file_get_contents("php://input");
+            $req = json_decode($input, true);
+
+            if (!$req || !isset($req['idNota'])) {
+                $this->sendErrorResponse(400, 'El campo {idNota} es obligatorio en el cuerpo de la solicitud');
+            }
+
+            $notaID = $req['idNota'];
+            // Validar que el ID de la nota es válido
+            $this->validateNoteIdFromRequest($notaID);
+        } else{
+            $notaID = $_POST['id'];
+        }
+
+
         $notaDAO = new NotaDAOImplMySql();
 
         $notaService = new NotaService($notaDAO);
+
+        // Verificar que la nota existe
+        $getNote = $notaService->obtenerNota($notaID);
+
+        // Verificar la propiedad de la nota
+        if ($authenticatedUser) {
+            $this->existIdNoteBaseDates($getNote);
+            $this->verifyNoteOwnership($getNote, $authenticatedUser);
+        } else {
+            authorize($getNote['user_id'] === $this->currentUserId);
+        }
+
+
         $notaService->eliminarNota($notaID);
 
-        header('location: /notes');
-        exit();
+        // Responder según el tipo de solicitud
+        if ($authenticatedUser) {
+            // Respuesta para API
+            http_response_code(200);
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Nota eliminada con exito',
+                'deletedNoteId' => $notaID,
+            ]);
+            exit;
+        } else {
+            // Redireccionar en caso de solicitud normal
+            header('location: /notes');
+            exit();
+        }
     }
 
     public function edit()

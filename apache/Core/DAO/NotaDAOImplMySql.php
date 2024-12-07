@@ -34,16 +34,9 @@ class NotaDAOImplMySql implements CrudNota
     public function eliminarNotaBD($notaID, $currentUserId)
     {
 
-
-        $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
-            ['id' => $notaID])->findOrFail();
-
-        authorize($note['user_id'] === $currentUserId);
-
         $this->conexionBaseDatos->query('delete from notes where id = :id', [
-            'id' => $_POST['id']
+            'id' => $notaID
         ]);
-
 
     }
 

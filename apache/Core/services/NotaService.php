@@ -21,7 +21,10 @@ class NotaService
 
         if ($authenticatedUser == null) {
             $this->currentUserId = $_SESSION['user']['id'];
+        }else{
+            $this->currentUserId = $authenticatedUser['id'];
         }
+
 
     }
 
@@ -67,8 +70,6 @@ class NotaService
 
     public function eliminarNota($notaID)
     {
-
-
 
         $this->notaDAO->eliminarNotaBD($notaID, $this->currentUserId);
     }

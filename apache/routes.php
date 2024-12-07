@@ -38,7 +38,6 @@ $router->delete('/session', 'session/destroy.php');
 $router->post('/api/login', 'UserApiController@loginUser');
 
 $router->get('/api/note', 'NotesController@showNote')->only("AuthApiRestFul");
-
-
 $router->put('/api/note', 'NotesController@update')->only("AuthApiRestFul");
+$router->delete('/api/note', 'NotesController@destroy')->only('AuthApiRestFul');
 
