@@ -8,6 +8,7 @@ namespace Http\controllers;
 use Core\App;
 use Core\DAO\UsuarioDAO;
 use Core\Database;
+use Core\Middleware\AuthApiRestFul;
 
 
 class UserApiController
@@ -94,6 +95,20 @@ class UserApiController
             'message' => 'User successfully logged in',
             'access_token_guardalo' => $token,
         ]);
+        exit;
+    }
+
+    public function logoutUser()
+    {
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
+
+        $UsuarioDAO = new UsuarioDAO();
+        $UsuarioDAO->deleteTokenFromDatabase($authenticatedUser["api_token"]);
+
+
+        // Responder con éxito
+        http_response_code(200);
+        echo json_encode(['message' => 'Logout exitoso']);
         exit;
     }
 

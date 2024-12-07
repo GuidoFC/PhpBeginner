@@ -36,6 +36,7 @@ $router->delete('/session', 'session/destroy.php');
 
 // Rutas para Api
 $router->post('/api/login', 'UserApiController@loginUser');
+$router->delete('/api/logout', 'UserApiController@logoutUser')->only("AuthApiRestFul");
 
 $router->get('/api/note', 'NotesController@showNote')->only("AuthApiRestFul");
 $router->put('/api/note', 'NotesController@update')->only("AuthApiRestFul");

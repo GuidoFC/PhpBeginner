@@ -61,15 +61,21 @@ class AuthApiRestFul
         }
 
 
+
+
         // Verificar las credenciales del usuario
         $user = App::resolve(Database::class)
             ->query('select * from users where email = :email', [
                 ':email' => $req['email']
             ])->find();
 
+        if ($user["api_token"] == null){
+            $this->sendErrorResponse(401, 'No has iniciado sesion');
+        }
+
 
         if (!password_verify($getToken . "sal", $user['api_token'])) {
-            $this->sendErrorResponse(401, 'Token de seguridad no válido para este Usuario');
+            $this->sendErrorResponse(401, 'Token de seguridad no valido para este Usuario');
         }
 
         self::setAuthenticatedUser($user); // Guardar usuario autenticado
