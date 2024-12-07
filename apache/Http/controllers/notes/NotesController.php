@@ -176,7 +176,26 @@ class NotesController
     public function store()
     {
         // El mé_todo store() lo que hace es guardar una nota que se ha creado por primera vez!!!
-        $bodyNote = $_POST['body'];
+
+        // Verificar si el usuario está autenticado (para API)
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
+
+        if ($authenticatedUser) {
+            // Obtener el cuerpo de la solicitud en formato JSON
+            $input = file_get_contents("php://input");
+            $req = json_decode($input, true);
+
+            if (!$req || !isset($req['body'])) {
+                $this->sendErrorResponse(400, 'El campo {body} es obligatorio en el cuerpo de la solicitud');
+            }
+
+            $bodyNote = $req['body'];
+        } else{
+
+            $bodyNote = $_POST['body'];
+        }
+
+
 
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
@@ -184,16 +203,37 @@ class NotesController
         $errors = $notaService->isNoteBodyValidLength($bodyNote, "Insert");
 
         if (!empty($errors)) {
-            PathGoview("notes/create.view.php", [
-                'heading' => 'Create a Note',
-                'errors' => $errors
-            ]);
+            if ($authenticatedUser) {
+                // Respuesta de error para API
+                $this->sendErrorResponse(400, $errors['body']);
+            } else {
+                // Mostrar la vista de creación con errores
+                PathGoview("notes/create.view.php", [
+                    'heading' => 'Create a Note',
+                    'errors' => $errors
+                ]);
+                die();
+            }
         }
 
-        $notaService->insertNote($bodyNote);
+         $notaService->insertNote($bodyNote);
 
-        header('location: /notes');
-        die();
+
+        // Respuesta según el tipo de solicitud
+        if ($authenticatedUser) {
+            // Respuesta para API
+            http_response_code(201);
+            echo json_encode([
+                'status' => 'success',
+                'message' => 'Nota creada con exito',
+
+            ]);
+            exit;
+        } else {
+            // Redireccionar en caso de solicitud normal
+            header('location: /notes');
+            exit;
+        }
     }
 
     public function update()
