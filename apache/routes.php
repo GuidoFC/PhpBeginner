@@ -41,4 +41,4 @@ $router->get('/api/note', 'NotesController@showNote')->only("AuthApiRestFul");
 
 
 $router->put('/api/note', 'NotesController@update')->only("AuthApiRestFul");
-$router->put('/api/updateNote', 'NotesApiController@updateNote');
+

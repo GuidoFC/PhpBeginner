@@ -72,7 +72,7 @@ class NotaService
     {
 
 
-        $this->notaDAO->updateNota($notaID, $bodyNote, $this->currentUserId);
+        $this->notaDAO->updateNota($notaID, $bodyNote);
     }
 
     public function getAllNotasCurrentUser()

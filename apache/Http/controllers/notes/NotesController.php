@@ -56,7 +56,7 @@ class NotesController
         $notaService = new NotaService($notaDAO);
 
         $getNote =  $notaService->obtenerNota($notaID);
-
+        authorize( $getNote['user_id'] === $this->currentUserId);
         PathGoview("notes/edit.view.php", [
             'heading' => 'Edit a Note',
             'errors' => [],
@@ -109,7 +109,7 @@ class NotesController
             exit;
         }
 
-
+        authorize( $getNote['user_id'] === $this->currentUserId);
         PathGoview("notes/show.view.php", [
             'heading' => 'Mostrando la nota id: ' . $getNote['id'],
             'note' => $getNote
@@ -196,6 +196,7 @@ class NotesController
                     'note' => $getNote
                 ]);
             }
+            authorize( $getNote['user_id'] === $this->currentUserId);
         }
 
 
