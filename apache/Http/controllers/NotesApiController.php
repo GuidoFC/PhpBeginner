@@ -37,35 +37,40 @@ class NotesApiController
     {
 
         // Obtener el token del encabezado Authorization
-        $headers = getallheaders();
-        $getToken = $headers['Authorization'] ?? null;
+//        $headers = getallheaders();
+//        $getToken = $headers['Authorization'] ?? null;
 
         // Validar la presencia del token
-        $this->verifyTokenPresence($getToken);
+//        $this->verifyTokenPresence($getToken);
 
         // Validar el token y obtener el usuario
-        $usuarioDAO = new UsuarioDAO();
-        $user = $usuarioDAO->getUserByApiToken($getToken);
+//        $usuarioDAO = new UsuarioDAO();
+//        $user = $usuarioDAO->getUserByApiToken($getToken);
 
 
         // Verificar que el usuario sea válido
-        $this->verifyUserWithToken($user);
+//        $this->verifyUserWithToken($user);
 
         // Obtener el ID  y Body de la nota desde la solicitud
-        $dataFromJson = json_decode(file_get_contents('php://input'), true);
+//        $dataFromJson = json_decode(file_get_contents('php://input'), true);
 
-
-        if (!$dataFromJson) {
-            $this->sendErrorResponse(400, 'Los campos {idNota} y {body} son obligatorios');
-        }
-
-        if (!$dataFromJson || !isset($dataFromJson['idNota'])) {
-            $this->sendErrorResponse(400, 'El campo {idNota} es obligatorio');
-        }
-
-        if (!$dataFromJson || !isset($dataFromJson['body'])) {
-            $this->sendErrorResponse(400, 'El campo {body} es obligatorio');
-        }
+//        $input = file_get_contents("php://input"); // Sirve para obtener los datos enviados en el cuerpo (body) de una petición HTTP y guardarlos en una variable como un string.
+//
+//        $dataFromJson = json_decode($input, true); // Convierte ese string JSON en un array asociativo para que puedas trabajar con los datos más fácilmente.
+//
+//
+//
+//        if (!$dataFromJson) {
+//            $this->sendErrorResponse(400, 'Los campos {idNota} y {body} son obligatorios');
+//        }
+//
+//        if (!isset($dataFromJson['idNota'])) {
+//            $this->sendErrorResponse(400, 'El campo {idNota} es obligatorio');
+//        }
+//
+//        if (!isset($dataFromJson['body'])) {
+//            $this->sendErrorResponse(400, 'El campo {body} es obligatorio');
+//        }
 
 
         // Verificar si la nota existe

@@ -5,6 +5,7 @@ namespace Http\controllers\notes;
 use Core\App;
 use Core\DAO\NotaDAOImplMySql;
 use Core\Database;
+use Core\Middleware\AuthApiRestFul;
 use Core\model\Nota;
 use Core\services\NotaService;
 use Core\Validator;
@@ -141,35 +142,88 @@ class NotesController
 
     public function update()
     {
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
 
-        $notaID = $_POST['id'];
-        $bodyNote = $_POST['body'];
+
+        if ($authenticatedUser) {
+            $notaID = $this->getNoteIdFromRequest();
+            $this->validateNoteIdFromRequest($notaID);
+
+            $input = file_get_contents("php://input"); // Sirve para obtener los datos enviados en el cuerpo (body) de una petición HTTP y guardarlos en una variable como un string.
+
+            $req = json_decode($input, true); // Convierte ese string JSON en un array asociativo para que puedas trabajar con los datos más fácilmente.
+
+
+            if (!$req) {
+                $this->sendErrorResponse(400, 'Los campos {idNota} y {body} son obligatorios');
+            }
+
+            if (!isset($req['body'])) {
+                $this->sendErrorResponse(400, 'El campo {body} es obligatorio');
+            }
+            $bodyNote = $req['body'];
+            // tengo el id de la nota??
+
+        } else {
+            $notaID = $_POST['id'];
+            $bodyNote = $_POST['body'];
+        }
+
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
 
-        $getNote =  $notaService->obtenerNota($notaID);
+        $getNote = $notaService->obtenerNota($notaID);
+
 
         $errors = $notaService->isNoteBodyValidLength($bodyNote, "Update");
-        if (count($errors)) {
-            PathGoview("notes/edit.view.php", [
-                'heading' => 'Edit Note',
-                'errors' => $errors,
-                'note' => $getNote
-            ]);
+
+        if ($authenticatedUser) {
+            if (!empty($errors)) {
+                $this->sendErrorResponse(400, $errors['body']);
+            }
+            $this->existIdNoteBaseDates($getNote);
+
+
+            // Verificar que la nota pertenezca al usuario
+            $this->verifyNoteOwnership($getNote, $authenticatedUser);
+
+
+        } else {
+            if (count($errors)) {
+                PathGoview("notes/edit.view.php", [
+                    'heading' => 'Edit Note',
+                    'errors' => $errors,
+                    'note' => $getNote
+                ]);
+            }
         }
+
 
         $notaService->updateNota($notaID, $bodyNote);
 
 
+        if ($authenticatedUser) {
 
-        header('location: /notes');
-        die();
+            // Enviar respuesta de éxito
+            http_response_code(200);
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'Nota edita con exito',
+                'DatosEnviados' => $req,
+            ]);
+            exit;
+        } else {
+            header('location: /notes');
+            die();
+        }
+
     }
 
     public function getNoteIdFromRequest(): mixed
     {
         return $_GET['id'] ?? null;
     }
+
     public function validateNoteIdFromRequest($notaID)
     {
         if (!$notaID) {
