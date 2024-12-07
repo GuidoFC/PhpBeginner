@@ -23,7 +23,15 @@ class NotesController
     public function __construct($conexionBaseDatos)
     {
         $this->conexionBaseDatos = $conexionBaseDatos;
-        $this->currentUserId = $_SESSION['user']['id'];
+        // Puedo hacer que si viene por una api, me guarde un dato, y si viene de web otro dato
+
+
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
+
+        if ($authenticatedUser == null) {
+            $this->currentUserId = $_SESSION['user']['id'];
+        }
+
     }
 
     public function create()

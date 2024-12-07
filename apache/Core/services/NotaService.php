@@ -3,6 +3,7 @@
 namespace Core\services;
 
 use Core\DAO\NotaDAOImplMySql;
+use Core\Middleware\AuthApiRestFul;
 use Core\model\Nota;
 use Core\Validator;
 use Core\interfaces\CrudNota;
@@ -16,7 +17,11 @@ class NotaService
     public function __construct($notaDAO)
     {
         $this->notaDAO = $notaDAO;
-        $this->currentUserId = $_SESSION['user']['id'];
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
+
+        if ($authenticatedUser == null) {
+            $this->currentUserId = $_SESSION['user']['id'];
+        }
 
     }
 
