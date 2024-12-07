@@ -26,7 +26,7 @@ class Database {
         return $this->statement->fetchAll();
     }
     public function find(){
-        return $this->statement->fetch();
+        return $this->statement->fetch(); // fetch = ir a buscar
     }
     public function findOrFail()
     {
