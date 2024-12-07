@@ -37,7 +37,7 @@ $router->delete('/session', 'session/destroy.php');
 // Rutas para Api
 $router->post('/api/login', 'UserApiController@loginUser');
 
-$router->get('/api/oneNote', 'NotesApiController@getNote')->only("AuthApiRestFul");
+$router->get('/api/note', 'NotesController@showNote')->only("AuthApiRestFul");
 
 
 $router->get('/api/note/edit', 'NotesController@edit')->only("AuthApiRestFul");

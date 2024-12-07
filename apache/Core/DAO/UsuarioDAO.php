@@ -32,11 +32,11 @@ class UsuarioDAO implements CrudUsuario
         $auth = new Authenticator();
 
 
-        $auth->login($crearUsuario->getCorreo() , $crearUsuario->getId());
+        $auth->login($crearUsuario->getCorreo(), $crearUsuario->getId());
         redirect('/');
     }
 
-    public static function getIdUserCreate($crearUsuario) : int
+    public static function getIdUserCreate($crearUsuario): int
     {
         $db = App::resolve(Database::class);
         $email = $crearUsuario->getCorreo();
@@ -52,6 +52,8 @@ class UsuarioDAO implements CrudUsuario
         $idUser = $result->find();
 
 
+        // La busqueda en la base de datos con el find() te devuelve un Array, y tu quieres coger lo que te da
+        // ek array ["id"]=> int(20)
         return $idUser["id"];
 
     }

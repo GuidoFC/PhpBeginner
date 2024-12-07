@@ -9,6 +9,7 @@ use Core\App;
 use Core\DAO\NotaDAOImplMySql;
 use Core\DAO\UsuarioDAO;
 use Core\Database;
+use Core\Middleware\AuthApiRestFul;
 use Core\services\NotaService;
 
 
@@ -30,41 +31,7 @@ class NotesApiController
     }
 
     // Todo me falta: Eliminar nota, crear nota
-    public function getNote()
-    {
 
-        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
-
-        $notaID = $this->getNoteIdFromRequest();
-
-
-        $this->validateNoteIdFromRequest($notaID);
-
-
-        $notaDAO = new NotaDAOImplMySql();
-        $notaService = new NotaService($notaDAO);
-
-        $getNote = $notaService->obtenerNota($notaID);
-
-
-        $this->validateIDNoteBaseDates($getNote);
-
-
-        $this->verifyNoteOwnership($getNote, $authenticatedUser);
-
-
-        // Enviar mensaje de resupuesta si es exitoso la peticion
-        http_response_code(200);
-        // enviar una respuesta HTTP con contenido en formato JSON
-        // header: Informa al cliente (por ejemplo, un navegador web o una aplicación)
-        // que el contenido que se enviará está en formato JSON
-        header('Content-Type: application/json');
-        echo json_encode([
-            'status' => 'success',
-            'data' => $getNote,
-        ]);
-        exit;
-    }
 
     public function updateNote()
     {
@@ -109,15 +76,14 @@ class NotesApiController
         $note = $notaService->obtenerNota($dataFromJson['idNota']);
 
 
-        $this->validateIDNoteBaseDates($note);
+        $this->existIdNoteBaseDates($note);
 
         // Verificar que la nota pertenezca al usuario
         $this->verifyNoteOwnership($note, $user);
 
 
         // Actualizar la nota
-        $notaService->updateNota($note["id"],  $dataFromJson['body']);
-
+        $notaService->updateNota($note["id"], $dataFromJson['body']);
 
 
         // Todo tengo que ver como solucionar si no se actualiza la nota
@@ -164,11 +130,11 @@ class NotesApiController
     public function validateNoteIdFromRequest($notaID)
     {
         if (!$notaID) {
-            $this->sendErrorResponse(403, 'Se requiere el id de la nota como Parametro, ej: ?id=40');
+            $this->sendErrorResponse(403, 'Se requiere el id de la nota como Parametro en la URL, ej: ?id=40');
         }
     }
 
-    private function validateIDNoteBaseDates($getNote)
+    private function existIdNoteBaseDates($getNote)
     {
         if (!$getNote) {
             $this->sendErrorResponse(403, 'Nota no encontrada en base Datos, verifique id nota');

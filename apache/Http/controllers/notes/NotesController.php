@@ -80,11 +80,33 @@ class NotesController
     {
 // TODO coincide con el metodo edit()
 
-        $notaID = $_GET['id'];
+
+
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
+
+        $notaID = $this->getNoteIdFromRequest();
+        $this->validateNoteIdFromRequest($notaID);
 
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
         $getNote =  $notaService->obtenerNota($notaID);
+
+        if ($authenticatedUser){
+            $this->existIdNoteBaseDates($getNote);
+
+            $this->verifyNoteOwnership($getNote, $authenticatedUser);
+            // Enviar mensaje de resupuesta si es exitoso la peticion
+            http_response_code(200);
+            // enviar una respuesta HTTP con contenido en formato JSON
+            // header: Informa al cliente (por ejemplo, un navegador web o una aplicación)
+            // que el contenido que se enviará está en formato JSON
+            header('Content-Type: application/json');
+            echo json_encode([
+                'status' => 'Exito en la peticion',
+                'Nota' => $getNote,
+            ]);
+            exit;
+        }
 
 
         PathGoview("notes/show.view.php", [
@@ -142,6 +164,43 @@ class NotesController
 
         header('location: /notes');
         die();
+    }
+
+    public function getNoteIdFromRequest(): mixed
+    {
+        return $_GET['id'] ?? null;
+    }
+    public function validateNoteIdFromRequest($notaID)
+    {
+        if (!$notaID) {
+            $this->sendErrorResponse(403, 'Se requiere el id de la nota como Parametro en la URL, ej: ?id=40');
+        }
+    }
+
+    private function existIdNoteBaseDates($getNote)
+    {
+        if (!$getNote) {
+            $this->sendErrorResponse(403, 'Nota no encontrada en base Datos, verifique id nota');
+        }
+    }
+
+    private function sendErrorResponse($statusCode, $message)
+    {
+        http_response_code($statusCode);
+        echo json_encode([
+            'status' => 'error',
+            'message' => $message,
+        ]);
+        // Detiene la ejecución después de enviar la respuesta.
+        exit;
+    }
+
+    private function verifyNoteOwnership($getNote, $user)
+    {
+        // Verificar si la nota pertenece al usuario
+        if ($getNote['user_id'] !== $user['id']) {
+            $this->sendErrorResponse(403, 'Este usuario no tienes permiso para ver esta nota');
+        }
     }
 
 
