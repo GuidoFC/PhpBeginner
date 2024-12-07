@@ -20,15 +20,12 @@ class NotaDAOImplMySql implements CrudNota
     }
 
 
-
     public function buscarUnaNota($notaId, $currentUserId)
     {
-        $note = null;
-        try {
-            // Tengo la info de toda la nota
-            $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
-                ['id' => $notaId
-                ])->find();
+        // Tengo la info de toda la nota
+        $note = $this->conexionBaseDatos->query('select * from notes where  id = :id',
+            ['id' => $notaId
+            ])->find();
 
         return $note;
     }
@@ -49,7 +46,8 @@ class NotaDAOImplMySql implements CrudNota
 
     }
 
-    public function insertNote($NotaModificada, $currentUserId){
+    public function insertNote($NotaModificada, $currentUserId)
+    {
 
         $this->conexionBaseDatos->query('INSERT INTO notes(body, user_id) VALUES(:body, :user_id)', [
             'body' => $NotaModificada,
@@ -57,7 +55,8 @@ class NotaDAOImplMySql implements CrudNota
         ]);
     }
 
-    public function updateNota($notaID, $bodyNote){
+    public function updateNota($notaID, $bodyNote)
+    {
 
         $this->conexionBaseDatos->query('update notes set body = :body where id = :id', [
             'id' => $notaID,
@@ -75,3 +74,4 @@ class NotaDAOImplMySql implements CrudNota
     }
 
 }
+
