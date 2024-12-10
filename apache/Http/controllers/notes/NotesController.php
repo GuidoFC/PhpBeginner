@@ -30,7 +30,7 @@ class NotesController
 
         if ($authenticatedUser == null) {
             $this->currentUserId = $_SESSION['user']['id'];
-        }else{
+        } else {
             $this->currentUserId = $authenticatedUser['id'];
         }
 
@@ -57,7 +57,7 @@ class NotesController
 
         if (!$request || isset($req[$requiredParameters])) {
 
-            $this->sendErrorResponse(400, "El campo " . $requiredParameters ." es obligatorio en el cuerpo de la solicitud");
+            $this->sendErrorResponse(400, "El campo " . $requiredParameters . " es obligatorio en el cuerpo de la solicitud");
 
         }
     }
@@ -70,12 +70,12 @@ class NotesController
             $req = $this->getJsonRequest();
             $this->validateRequestParametersJson($req, 'idNota');
 
-             $notaID = $req['idNota'];
+            $notaID = $req['idNota'];
             // Validar que el ID de la nota es válido, es decir, de esta forma ev
             $this->validateNoteIdFromRequestIsNotStringEmpty($notaID);
 
             return $notaID;
-        } else{
+        } else {
             $notaID = $_POST['id'];
             return $notaID;
         }
@@ -126,8 +126,8 @@ class NotesController
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
 
-        $getNote =  $notaService->obtenerNota($notaID);
-        authorize( $getNote['user_id'] === $this->currentUserId);
+        $getNote = $notaService->obtenerNota($notaID);
+        authorize($getNote['user_id'] === $this->currentUserId);
         PathGoview("notes/edit.view.php", [
             'heading' => 'Edit a Note',
             'errors' => [],
@@ -140,7 +140,7 @@ class NotesController
 
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
-        $getNote =  $notaService->getAllNotasCurrentUser();
+        $getNote = $notaService->getAllNotasCurrentUser();
 
         PathGoview("notes/index.view.php", [
             'heading' => 'Todas Mis Notas Personales!!!',
@@ -153,7 +153,6 @@ class NotesController
 // TODO coincide con el metodo edit()
 
 
-
         $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
 
         $notaID = $this->getNoteIdFromRequest();
@@ -161,9 +160,9 @@ class NotesController
 
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
-        $getNote =  $notaService->obtenerNota($notaID);
+        $getNote = $notaService->obtenerNota($notaID);
 
-        if ($authenticatedUser){
+        if ($authenticatedUser) {
             $this->existIdNoteBaseDates($getNote);
 
             $this->verifyNoteOwnership($getNote, $authenticatedUser);
@@ -173,7 +172,7 @@ class NotesController
             exit;
         }
 
-        authorize( $getNote['user_id'] === $this->currentUserId);
+        authorize($getNote['user_id'] === $this->currentUserId);
         PathGoview("notes/show.view.php", [
             'heading' => 'Mostrando la nota id: ' . $getNote['id'],
             'note' => $getNote
@@ -195,11 +194,10 @@ class NotesController
             $this->validateRequestParametersJson($req, 'body');
 
             $bodyNote = $req['body'];
-        } else{
+        } else {
 
             $bodyNote = $_POST['body'];
         }
-
 
 
         $notaDAO = new NotaDAOImplMySql();
@@ -221,7 +219,7 @@ class NotesController
             }
         }
 
-         $notaService->insertNote($bodyNote);
+        $notaService->insertNote($bodyNote);
 
 
         // Respuesta según el tipo de solicitud
@@ -271,8 +269,6 @@ class NotesController
                 $this->sendErrorResponse(400, $errors['body']);
             }
             $this->existIdNoteBaseDates($getNote);
-
-
             // Verificar que la nota pertenezca al usuario
             $this->verifyNoteOwnership($getNote, $authenticatedUser);
 
@@ -285,7 +281,7 @@ class NotesController
                     'note' => $getNote
                 ]);
             }
-            authorize( $getNote['user_id'] === $this->currentUserId);
+            authorize($getNote['user_id'] === $this->currentUserId);
         }
 
 
