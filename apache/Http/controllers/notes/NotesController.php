@@ -110,12 +110,7 @@ class NotesController
         // Responder según el tipo de solicitud
         if ($authenticatedUser) {
             // Respuesta para API
-            http_response_code(200);
-            echo json_encode([
-                'status' => 'success',
-                'message' => 'Nota eliminada con exito',
-                'deletedNoteId' => $notaID,
-            ]);
+            $this->sendSuccesResponse(200, 'Nota eliminada con exito');
             exit;
         } else {
             // Redireccionar en caso de solicitud normal
@@ -173,15 +168,8 @@ class NotesController
 
             $this->verifyNoteOwnership($getNote, $authenticatedUser);
             // Enviar mensaje de resupuesta si es exitoso la peticion
-            http_response_code(200);
-            // enviar una respuesta HTTP con contenido en formato JSON
-            // header: Informa al cliente (por ejemplo, un navegador web o una aplicación)
-            // que el contenido que se enviará está en formato JSON
-            header('Content-Type: application/json');
-            echo json_encode([
-                'status' => 'Exito en la peticion',
-                'Nota' => $getNote,
-            ]);
+            $this->sendSuccesResponse(200, 'Mostrando el body de la nota', $getNote["body"]);
+
             exit;
         }
 
@@ -239,12 +227,7 @@ class NotesController
         // Respuesta según el tipo de solicitud
         if ($authenticatedUser) {
             // Respuesta para API
-            http_response_code(201);
-            echo json_encode([
-                'status' => 'success',
-                'message' => 'Nota creada con exito',
-
-            ]);
+            $this->sendSuccesResponse(200, 'Nota creada con exito');
             exit;
         } else {
             // Redireccionar en caso de solicitud normal
@@ -310,14 +293,7 @@ class NotesController
 
 
         if ($authenticatedUser) {
-
-            // Enviar respuesta de éxito
-            http_response_code(200);
-            header('Content-Type: application/json');
-            echo json_encode([
-                'status' => 'Nota edita con exito',
-                'DatosEnviados' => $req,
-            ]);
+            $this->sendSuccesResponse(200, 'Nota edita con exito', $bodyNote);
             exit;
         } else {
             header('location: /notes');
@@ -355,6 +331,28 @@ class NotesController
         // Detiene la ejecución después de enviar la respuesta.
         exit;
     }
+
+    private function sendSuccesResponse($statusCode, $message, $data = null)
+    {
+        // Construir el array de respuesta
+        $response = [
+            'status' => 'Peticion realizada con exito',
+            'message' => $message,
+        ];
+
+        // Agregar 'dato' solo si $data no es null
+        if ($data !== null) {
+            $response['dato'] = $data;
+        }
+
+        // Enviar la respuesta como JSON
+        http_response_code($statusCode);
+        echo json_encode($response);
+
+        // Detener la ejecución
+        exit;
+    }
+
 
     private function verifyNoteOwnership($getNote, $user)
     {
