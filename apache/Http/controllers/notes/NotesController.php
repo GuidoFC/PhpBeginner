@@ -45,6 +45,13 @@ class NotesController
         ]);
     }
 
+    private function getJsonRequest()
+    {
+        $input = file_get_contents("php://input");
+        return json_decode($input, true);
+
+    }
+
     public function destroy()
     {
 
@@ -54,9 +61,7 @@ class NotesController
         // Obtener el ID de la nota desde la solicitud
         if ($authenticatedUser) {
             // En caso de API, obtener el ID del cuerpo de la solicitud
-            $input = file_get_contents("php://input");
-            $req = json_decode($input, true);
-
+            $req = $this->getJsonRequest();
             if (!$req || !isset($req['idNota'])) {
                 $this->sendErrorResponse(400, 'El campo {idNota} es obligatorio en el cuerpo de la solicitud');
             }
@@ -182,8 +187,7 @@ class NotesController
 
         if ($authenticatedUser) {
             // Obtener el cuerpo de la solicitud en formato JSON
-            $input = file_get_contents("php://input");
-            $req = json_decode($input, true);
+            $req = $this->getJsonRequest();
 
             if (!$req || !isset($req['body'])) {
                 $this->sendErrorResponse(400, 'El campo {body} es obligatorio en el cuerpo de la solicitud');
@@ -245,10 +249,7 @@ class NotesController
             $notaID = $this->getNoteIdFromRequest();
             $this->validateNoteIdFromRequest($notaID);
 
-            $input = file_get_contents("php://input"); // Sirve para obtener los datos enviados en el cuerpo (body) de una petición HTTP y guardarlos en una variable como un string.
-
-            $req = json_decode($input, true); // Convierte ese string JSON en un array asociativo para que puedas trabajar con los datos más fácilmente.
-
+            $req = $this->getJsonRequest();
 
             if (!$req) {
                 $this->sendErrorResponse(400, 'Los campos {idNota} y {body} son obligatorios');
