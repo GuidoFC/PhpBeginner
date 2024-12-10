@@ -52,7 +52,7 @@ class NotesController
 
     }
 
-    public function validateRequestParametersJson($request, $requiredParameters)
+    private function validateRequestParametersJson($request, $requiredParameters)
     {
 
         if (!$request || isset($req[$requiredParameters])) {
@@ -62,25 +62,32 @@ class NotesController
         }
     }
 
-    public function destroy()
+    private function getNotaID($authenticatedUser)
     {
-
-        // Verificar si el usuario está autenticado
-        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
-
         // Obtener el ID de la nota desde la solicitud
         if ($authenticatedUser) {
             // En caso de API, obtener el ID del cuerpo de la solicitud
             $req = $this->getJsonRequest();
             $this->validateRequestParametersJson($req, 'idNota');
 
-            $notaID = $req['idNota'];
-            // Validar que el ID de la nota es válido
-            $this->validateNoteIdFromRequest($notaID);
+             $notaID = $req['idNota'];
+            // Validar que el ID de la nota es válido, es decir, de esta forma ev
+            $this->validateNoteIdFromRequestIsNotStringEmpty($notaID);
+
+            return $notaID;
         } else{
             $notaID = $_POST['id'];
+            return $notaID;
         }
+    }
 
+    public function destroy()
+    {
+
+        // Verificar si el usuario está autenticado
+        $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
+
+        $notaID = $this->getNotaID($authenticatedUser);
 
         $notaDAO = new NotaDAOImplMySql();
 
@@ -155,7 +162,7 @@ class NotesController
         $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
 
         $notaID = $this->getNoteIdFromRequest();
-        $this->validateNoteIdFromRequest($notaID);
+        $this->validateNoteIdFromRequestIsNotStringEmpty($notaID);
 
         $notaDAO = new NotaDAOImplMySql();
         $notaService = new NotaService($notaDAO);
@@ -253,7 +260,7 @@ class NotesController
 
         if ($authenticatedUser) {
             $notaID = $this->getNoteIdFromRequest();
-            $this->validateNoteIdFromRequest($notaID);
+            $this->validateNoteIdFromRequestIsNotStringEmpty($notaID);
 
             $req = $this->getJsonRequest();
 
@@ -324,7 +331,7 @@ class NotesController
         return $_GET['id'] ?? null;
     }
 
-    public function validateNoteIdFromRequest($notaID)
+    public function validateNoteIdFromRequestIsNotStringEmpty($notaID)
     {
         if (!$notaID) {
             $this->sendErrorResponse(403, 'Se requiere el id de la nota como Parametro en la URL, ej: ?id=40');
