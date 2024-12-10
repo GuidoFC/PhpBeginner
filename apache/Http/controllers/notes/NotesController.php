@@ -52,6 +52,16 @@ class NotesController
 
     }
 
+    public function validateRequestParametersJson($request, $requiredParameters)
+    {
+
+        if (!$request || isset($req[$requiredParameters])) {
+
+            $this->sendErrorResponse(400, "El campo " . $requiredParameters ." es obligatorio en el cuerpo de la solicitud");
+
+        }
+    }
+
     public function destroy()
     {
 
@@ -62,9 +72,7 @@ class NotesController
         if ($authenticatedUser) {
             // En caso de API, obtener el ID del cuerpo de la solicitud
             $req = $this->getJsonRequest();
-            if (!$req || !isset($req['idNota'])) {
-                $this->sendErrorResponse(400, 'El campo {idNota} es obligatorio en el cuerpo de la solicitud');
-            }
+            $this->validateRequestParametersJson($req, 'idNota');
 
             $notaID = $req['idNota'];
             // Validar que el ID de la nota es válido
@@ -189,9 +197,7 @@ class NotesController
             // Obtener el cuerpo de la solicitud en formato JSON
             $req = $this->getJsonRequest();
 
-            if (!$req || !isset($req['body'])) {
-                $this->sendErrorResponse(400, 'El campo {body} es obligatorio en el cuerpo de la solicitud');
-            }
+            $this->validateRequestParametersJson($req, 'body');
 
             $bodyNote = $req['body'];
         } else{
@@ -251,13 +257,9 @@ class NotesController
 
             $req = $this->getJsonRequest();
 
-            if (!$req) {
-                $this->sendErrorResponse(400, 'Los campos {idNota} y {body} son obligatorios');
-            }
+            $this->validateRequestParametersJson($req, 'idNota');
+            $this->validateRequestParametersJson($req, 'body');
 
-            if (!isset($req['body'])) {
-                $this->sendErrorResponse(400, 'El campo {body} es obligatorio');
-            }
             $bodyNote = $req['body'];
             // tengo el id de la nota??
 
