@@ -2,9 +2,9 @@
 
 namespace Core\Middleware;
 
-class Auth //hola
+class Auth
 {
-//    /prueba
+
     public function handle()
     {
         if (!isset($_SESSION['user']) || !$_SESSION['user']) {

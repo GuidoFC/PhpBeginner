@@ -2,9 +2,9 @@
 
 namespace Core\Middleware;
 
-class Middleware
+class Middleware // Traducción de Middleware --> Filtro: Por su rol de permitir o bloquear solicitudes.
 {
-    public const MAP = [
+    public const MAPEAR_AUTORIZACION = [
         'guest' => Guest::class,
         'auth' => Auth::class,
         'AuthApiRestFul' => AuthApiRestFul::class
@@ -14,7 +14,8 @@ class Middleware
         if (!$key){
             return;
         }
-        $middleware = static::MAP[$key] ?? false;
+        $middleware = static::MAPEAR_AUTORIZACION[$key] ?? false;
+        // Si $middleware = false implica que !$middleware es TRUE entonces se ejecutaria el condicional
         if(!$middleware){
             throw new \Exception("no matching middle ware for {$key}. ");
         }

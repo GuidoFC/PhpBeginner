@@ -7,7 +7,9 @@ session_start();
 
 const BASE_PATH = __DIR__.'/../';
 
-require BASE_PATH.'Core/functions.php';
+// require: Incluye otro archivo PHP en el archivo actual.
+require BASE_PATH . 'Core/functions.php';
+
 
 spl_autoload_register(function ($class) {
     $class = str_replace('\\', DIRECTORY_SEPARATOR, $class);
@@ -25,10 +27,13 @@ $router = new \Core\Router();
 
 $routes = require base_path('routes.php');
 
-$uri = parse_url($_SERVER['REQUEST_URI'])['path'];
-$method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
+$uri = parse_url($_SERVER['REQUEST_URI'])['path']; // me da la ruta en la que me encuentro
+
+$method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD']; // me deci si estoy por el metodo post, get, put, delete
+
 
 try {
+    // Este es el paso donde pasamos de la vista al controlador
     $router->route($uri, $method);
 } catch (ValidationException $exception) {
     Session::flash('errors', $exception->errors);

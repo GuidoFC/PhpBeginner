@@ -13,45 +13,48 @@ class Router
 {
     protected $routesGuardas = [];
 
-    public function add($method, $uri, $Carpetacontroller)
+    public function addRutas($method, $uri, $CarpetaControllers)
     {
+       // si vamos a routes.php estoy añadiendo todas las rutas en mi array $routesGuardas
         $this->routesGuardas[] = [
             'uri' => $uri,
-            'controller' => $Carpetacontroller,
+            'controller' => $CarpetaControllers,
             'method' => $method,
             'middleware' => null
         ];
         return $this;
     }
 
-    public function get($uri, $Carpetacontroller)
+    public function addRutasMetodoGet($uri, $CarpetaControllers)
     {
-        return $this->add('GET', $uri, $Carpetacontroller);
+        return $this->addRutas('GET', $uri, $CarpetaControllers);
     }
 
     public function delete($uri, $Carpetacontroller)
     {
-        return $this->add('DELETE', $uri, $Carpetacontroller);
+        return $this->addRutas('DELETE', $uri, $Carpetacontroller);
     }
 
     public function post($uri, $Carpetacontroller)
     {
-        return $this->add('POST', $uri, $Carpetacontroller);
+        return $this->addRutas('POST', $uri, $Carpetacontroller);
     }
 
     public function patch($uri, $Carpetacontroller)
     {
-        return $this->add('PATCH', $uri, $Carpetacontroller);
+
+        return $this->addRutas('PATCH', $uri, $Carpetacontroller);
     }
 
     public function put($uri, $Carpetacontroller)
     {
-        return $this->add('PUT', $uri, $Carpetacontroller);
+        return $this->addRutas('PUT', $uri, $Carpetacontroller);
     }
 
     public function only($key)
     {
-        $this->routesGuardas[array_key_last($this->routesGuardas)]['middleware'] = $key;
+//        dd( $this->routesGuardas[array_key_last($this->routesGuardas)]); // estoy asignanado un valor al middleware, en este caso le asigno el valor "auth", "guest", "AuthApiRestFul"
+        $this->routesGuardas[array_key_last($this->routesGuardas)]['middleware'] = $key; //  middleware traducción -> Filtro: Por su rol de permitir o bloquear solicitudes.
         return $this;
     }
 
