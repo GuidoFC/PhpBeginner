@@ -58,13 +58,19 @@ class UsuarioDAO implements CrudUsuario
 
     }
 
-    public function storeTokenInDatabase($userId, $token): void
+    public function storeTokenInDatabase($token, $dispotivo, $user_id, $created_at, $finaliza) : void
     {
         $db = App::resolve(Database::class); // Instancia de tu clase de base de datos
-        $db->query("UPDATE users SET api_token = :token WHERE id = :id", [
+
+
+        $db ->query('INSERT INTO tokens(token, dispotivo, user_id, created_at, finaliza) VALUES(:token, :dispotivo, :user_id, :created_at, :finaliza)', [
             'token' => $token,
-            'id' => $userId
+            'dispotivo' => $dispotivo,
+            'user_id' => $user_id,
+            'created_at' => $created_at,
+            'finaliza' => $finaliza
         ]);
+
     }
 
     function getUserByApiToken($providedToken)

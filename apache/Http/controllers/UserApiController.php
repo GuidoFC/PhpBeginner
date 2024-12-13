@@ -87,16 +87,20 @@ class UserApiController
 
         // Guardar el token en la base de datos
 
-        // TODO generar una fecha
+        // TODO guadar en la TABLA TOKEN
         $dateActual = date('Y/m/d h:i:s', time());
 
         $tomorrow = date('Y/m/d h:i:s', time() + 86400);
 
-        dd($tomorrow);
+        $dispotivo = "Api_restful";
+
+        // $user['id']
+
 
 
         $UsuarioDAO = new UsuarioDAO();
-        $UsuarioDAO->storeTokenInDatabase($user['id'], $tokenEncriptado);
+        // $token, $dispotivo, $user_id, $created_at, $finaliza
+        $UsuarioDAO->storeTokenInDatabase($tokenEncriptado ,$dispotivo ,$user['id'], $dateActual, $tomorrow);
 
         // Responder con el token
         http_response_code(200);
