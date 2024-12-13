@@ -73,8 +73,20 @@ class AuthApiRestFul
             $this->sendErrorResponse(401, 'No has iniciado sesion');
         }
 
+        // TODO aqui tengo que mirar la fecha del TOKEN. Si ya ha pasado X min, tengo que desactivar
+        // TODO el token
 
-        if (!password_verify($getToken . "sal", $user['api_token'])) {
+
+        // Verificar las credenciales del usuario
+        $getTokenTable = App::resolve(Database::class)
+            ->query('select * from tokens where user_id = :user_id', [
+                ':user_id' => $user["id"]
+            ])->find();
+
+
+
+
+        if (!password_verify($getToken . "sal", $getTokenTable["token"])) {
             $this->sendErrorResponse(401, 'Token de seguridad no valido para este Usuario');
         }
 
