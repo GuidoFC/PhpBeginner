@@ -92,7 +92,7 @@ class UserApiController
 
         $incrementarUnDia = 86400;
 
-        $tomorrow = date('Y/m/d h:i:s', time() + $incrementarUnDia);
+        $caducidadToken = date('Y/m/d h:i:s', time() + $incrementarUnDia);
 
         $dispotivo = "Api_restful";
 
@@ -102,7 +102,7 @@ class UserApiController
 
         $UsuarioDAO = new UsuarioDAO();
         // $token, $dispotivo, $user_id, $created_at, $finaliza
-        $UsuarioDAO->storeTokenInDatabase($tokenEncriptado ,$dispotivo ,$user['id'], $dateActual, $tomorrow);
+        $UsuarioDAO->storeTokenInDatabase($tokenEncriptado ,$dispotivo ,$user['id'], $dateActual, $caducidadToken);
 
         // Responder con el token
         http_response_code(200);
