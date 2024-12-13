@@ -77,11 +77,24 @@ class AuthApiRestFul
         // TODO el token
 
 
+        $dispotivo = "Api_restful";
+
         // Verificar las credenciales del usuario
         $getTokenTable = App::resolve(Database::class)
             ->query('select * from tokens where user_id = :user_id', [
                 ':user_id' => $user["id"]
             ])->find();
+
+        // Verificar la fecha del token
+        $dateActual = date('Y/m/d h:i:s', time());
+
+        // cooger la fecha del token cuando finaliza
+
+        $caducidadToken = $getTokenTable["finaliza"];
+
+        if ( $dateActual < $caducidadToken){
+            $this->sendErrorResponse(401, 'Tu token ha caducado');
+        }
 
 
 
