@@ -81,10 +81,19 @@ class UserApiController
         // Generar el token único
         $token = bin2hex(random_bytes(32));
 
+
         // encriptar el token
         $tokenEncriptado =  $this->encriptarToken($token . "sal");
 
         // Guardar el token en la base de datos
+
+        // TODO generar una fecha
+        $dateActual = date('Y/m/d h:i:s', time());
+
+        $tomorrow = date('Y/m/d h:i:s', time() + 86400);
+
+        dd($tomorrow);
+
 
         $UsuarioDAO = new UsuarioDAO();
         $UsuarioDAO->storeTokenInDatabase($user['id'], $tokenEncriptado);
