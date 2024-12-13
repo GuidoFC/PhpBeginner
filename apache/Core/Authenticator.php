@@ -49,7 +49,17 @@ class Authenticator
         // Guarda el token en la base de datos para asociarlo al usuario
 
         $UsuarioDAO = new UsuarioDAO();
-        $UsuarioDAO->storeTokenInDatabase($id, $token);
+
+        $dispositivo = "web";
+
+        $dateActual = date('Y/m/d h:i:s', time());
+
+        $incrementarUnDia = 86400;
+
+        $caducidadToken = date('Y/m/d h:i:s', time() + $incrementarUnDia);
+
+
+        $UsuarioDAO->storeTokenInDatabase($token, $dispositivo, $id, $dateActual, $caducidadToken);
 
 //        dd($_SESSION['user']);
 
