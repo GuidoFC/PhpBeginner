@@ -16,6 +16,7 @@ class UsuarioService
 
     public function crearUsuario(Usuario $usuario)
     {
+
         // Antes de crear el usuario encriptaremos la contraseña
         $getContrasena = $usuario->getContrasena();
         $contrasenaCripatada = UsuarioService::encriptarContrasena($getContrasena);
@@ -26,6 +27,7 @@ class UsuarioService
 //        die();
 
         // Usar la instancia de UsuarioDAO inyectada
+
         $this->usuarioDAO->crearUsuarioBD($usuario);
 
     }

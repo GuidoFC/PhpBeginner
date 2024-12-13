@@ -8,6 +8,7 @@ use Core\services\NotaService;
 use Http\controllers\notes\NotesController;
 use Http\controllers\UserApiController;
 use Http\controllers\NotesApiController;
+use Http\controllers\registration\UsuarioControler;
 
 // Solo hay que Crear un contenedor
 $container = new Container();
@@ -27,6 +28,14 @@ $container->bind('NotesController', function () {
     // TODO aqui le tendria que pasar
     $baseDatos = App::resolve(Database::class);
     return new NotesController($baseDatos);
+});
+
+$container->bind('UsuarioControler', function () {
+
+    // TODO aqui le tendria que pasar
+    $baseDatos = App::resolve(Database::class);
+
+    return new UsuarioControler($baseDatos);
 });
 
 $container->bind('UserApiController', function () {

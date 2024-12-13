@@ -44,4 +44,7 @@ $router->delete('/api/note', 'NotesController@destroy')->only('AuthApiRestFul');
 $router->post('/api/notes/create', 'NotesController@store')->only('AuthApiRestFul');
 
 // crear usuario
-$router->post('/api/user', 'registration/store.php');
+//$router->post('/api/user', 'registration/store.php');
+$router->post('/api/user', 'UsuarioControler@store');
+$router->post('/api/user', 'UsuarioControler@create');
+
