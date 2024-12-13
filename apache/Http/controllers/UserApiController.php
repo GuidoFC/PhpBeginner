@@ -6,6 +6,7 @@ namespace Http\controllers;
 // https://github.com/SajeebChakraborty/RESTful_CRUD_Auth_API_Laravel/blob/master/app/Console/Kernel.php
 
 use Core\App;
+use Core\DAO\TokenDAO;
 use Core\DAO\UsuarioDAO;
 use Core\Database;
 use Core\Middleware\AuthApiRestFul;
@@ -78,6 +79,7 @@ class UserApiController
             exit;
         }
 
+
         // Generar el token único
         $token = bin2hex(random_bytes(32));
 
@@ -100,9 +102,9 @@ class UserApiController
 
 
 
-        $UsuarioDAO = new UsuarioDAO();
+        $tokenDao = new TokenDAO();
         // $token, $dispotivo, $user_id, $created_at, $finaliza
-        $UsuarioDAO->storeTokenInDatabase($tokenEncriptado ,$dispotivo ,$user['id'], $dateActual, $caducidadToken);
+        $tokenDao->storeTokenInDatabase($tokenEncriptado ,$dispotivo ,$user['id'], $dateActual, $caducidadToken);
 
         // Responder con el token
         http_response_code(200);
@@ -129,8 +131,8 @@ class UserApiController
 
 
 
-        $UsuarioDAO = new UsuarioDAO();
-        $UsuarioDAO->deleteTokenFromDatabase($getIdToken);
+        $tokenDao = new TokenDAO();
+        $tokenDao->deleteTokenFromDatabase($getIdToken);
 
 
         // Responder con éxito

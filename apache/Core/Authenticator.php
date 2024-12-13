@@ -4,6 +4,7 @@ namespace Core;
 
 // Empezamos con la tarea
 //  Implementar autentificació i autorització.
+use Core\DAO\TokenDAO;
 use Core\DAO\UsuarioDAO;
 
 class Authenticator
@@ -48,7 +49,8 @@ class Authenticator
 
         // Guarda el token en la base de datos para asociarlo al usuario
 
-        $UsuarioDAO = new UsuarioDAO();
+        $tokenDAO = new TokenDAO();
+
 
         $dispositivo = "web";
 
@@ -59,7 +61,7 @@ class Authenticator
         $caducidadToken = date('Y/m/d h:i:s', time() + $incrementarUnDia);
 
 
-        $UsuarioDAO->storeTokenInDatabase($token, $dispositivo, $id, $dateActual, $caducidadToken);
+        $tokenDAO->storeTokenInDatabase($token, $dispositivo, $id, $dateActual, $caducidadToken);
 
 //        dd($_SESSION['user']);
 
