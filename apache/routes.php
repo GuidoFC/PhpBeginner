@@ -42,3 +42,6 @@ $router->addRutasMetodoGet('/api/note', 'NotesController@showNote')->only("AuthA
 $router->put('/api/note', 'NotesController@update')->only("AuthApiRestFul");
 $router->delete('/api/note', 'NotesController@destroy')->only('AuthApiRestFul');
 $router->post('/api/notes/create', 'NotesController@store')->only('AuthApiRestFul');
+
+// crear usuario
+$router->post('/api/user', 'registration/store.php');

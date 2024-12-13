@@ -13,6 +13,23 @@ $db = App::resolve(Database::class);
 // Muestra todas las variables guardadas en $_POST
 //var_dump($_POST);
 
+$input = file_get_contents("php://input"); // Sirve para obtener los datos enviados en el cuerpo (body) de una petición HTTP y guardarlos en una variable como un string.
+
+$req = json_decode($input, true);
+
+
+if ($req) {
+    $nombre = $req['nombre'];
+    $fecha_nacimiento = $req['fecha_nacimiento'];
+    $email = $req['email'];
+    $password = $req['password'];
+} else {
+    $nombre = $_POST['nombre'];
+    $fecha_nacimiento = $_POST['fecha_nacimiento'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+}
+
 // Detiene la ejecución del script
 //die();
 $nombre = $_POST['nombre'];
@@ -26,7 +43,19 @@ $auth = new Authenticator();
 
 // Validaciones
 if (!Validator::email($email)) {
-    $errors['email'] = 'Please provide a valid email address.';
+
+
+    if ($req != null) {
+        sendErrorResponse(403, 'Nota no encontrada en base Datos, verifique id nota');
+    }else{
+        $errors['email'] = 'Please provide a valid email address.';
+    }
+
+
+
+
+
+
 }
 
 if (!Validator::string($password, 7, 255)) {
@@ -72,4 +101,16 @@ if (!$user) {
     Session::flash('errors', $errors);
     Session::flash('old', ['email' => $email]);
     return redirect('/register');
+}
+
+
+function sendErrorResponse($statusCode, $message)
+{
+    http_response_code($statusCode);
+    echo json_encode([
+        'status' => 'error',
+        'message' => $message,
+    ]);
+    // Detiene la ejecución después de enviar la respuesta.
+    exit;
 }
