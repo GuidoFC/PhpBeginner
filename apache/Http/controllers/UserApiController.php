@@ -117,8 +117,20 @@ class UserApiController
     {
         $authenticatedUser = AuthApiRestFul::getAuthenticatedUser();
 
+        // TODO necesito coger el token del usuario actual
+
+
+        $getTokenTable = App::resolve(Database::class)
+            ->query('select * from tokens where user_id = :user_id', [
+                ':user_id' =>  $authenticatedUser["id"]
+            ])->find();
+
+        $getIdToken = $getTokenTable["id"];
+
+
+
         $UsuarioDAO = new UsuarioDAO();
-        $UsuarioDAO->deleteTokenFromDatabase($authenticatedUser["api_token"]);
+        $UsuarioDAO->deleteTokenFromDatabase($getIdToken);
 
 
         // Responder con éxito

@@ -89,13 +89,13 @@ class UsuarioDAO implements CrudUsuario
         return $user;
     }
 
-    public function deleteTokenFromDatabase($tokenEncriptado)
+    public function deleteTokenFromDatabase($idToken)
     {
 
         $db = App::resolve(Database::class); // Instancia de tu clase de base de datos
 
-        $db->query('UPDATE users SET api_token = NULL WHERE api_token = :token', [
-            'token' => $tokenEncriptado
+        $db->query('delete from tokens where id = :id', [
+            'id' => $idToken
         ]);
 
     }
