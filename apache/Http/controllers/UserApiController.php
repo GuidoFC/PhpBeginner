@@ -90,11 +90,13 @@ class UserApiController
         // TODO guadar en la TABLA TOKEN
         $dateActual = date('Y/m/d h:i:s', time());
 
-        $tomorrow = date('Y/m/d h:i:s', time() + 86400);
+        $incrementarUnDia = 86400;
+
+        $tomorrow = date('Y/m/d h:i:s', time() + $incrementarUnDia);
 
         $dispotivo = "Api_restful";
 
-        // $user['id']
+
 
 
 
