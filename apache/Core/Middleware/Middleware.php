@@ -3,7 +3,7 @@
 namespace Core\Middleware;
 
 class Middleware // Traducción de Middleware --> Filtro: Por su rol de permitir o bloquear solicitudes.
-{
+{ // comit examen
     public const MAPEAR_AUTORIZACION = [
         'guest' => Guest::class,
         'auth' => Auth::class,
