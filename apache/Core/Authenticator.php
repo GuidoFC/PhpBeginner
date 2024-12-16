@@ -61,7 +61,7 @@ class Authenticator
         $caducidadToken = date('Y/m/d h:i:s', time() + $incrementarUnDia);
 
 
-        $tokenDAO->storeTokenInDatabase($token, $dispositivo, $id, $dateActual, $caducidadToken);
+        $tokenDAO->storeTokenInDatabase($token, $id, $dateActual, $caducidadToken);
 
 //        dd($_SESSION['user']);
 

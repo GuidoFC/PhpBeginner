@@ -14,7 +14,7 @@ class UsuarioService
         $this->usuarioDAO = $usuarioDAO;
     }
 
-    public function crearUsuario(Usuario $usuario)
+    public function crearUsuario(Usuario $usuario, $isApi = false)
     {
 
         // Antes de crear el usuario encriptaremos la contraseña
@@ -28,7 +28,9 @@ class UsuarioService
 
         // Usar la instancia de UsuarioDAO inyectada
 
-        $this->usuarioDAO->crearUsuarioBD($usuario);
+
+
+        $this->usuarioDAO->crearUsuarioBD($usuario, $isApi);
 
     }
 

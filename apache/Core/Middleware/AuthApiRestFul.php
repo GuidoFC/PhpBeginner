@@ -69,7 +69,14 @@ class AuthApiRestFul
                 ':email' => $req['email']
             ])->find();
 
-        if ($user["api_token"] == null){
+        // Verificar las credenciales del usuario
+        $getTokenTable = App::resolve(Database::class)
+            ->query('select * from tokens where user_id = :user_id', [
+                ':user_id' => $user["id"]
+            ])->find();
+
+
+        if ($getTokenTable["token"] == null){
             $this->sendErrorResponse(401, 'No has iniciado sesion');
         }
 
@@ -79,11 +86,7 @@ class AuthApiRestFul
 
         $dispotivo = "Api_restful";
 
-        // Verificar las credenciales del usuario
-        $getTokenTable = App::resolve(Database::class)
-            ->query('select * from tokens where user_id = :user_id', [
-                ':user_id' => $user["id"]
-            ])->find();
+
 
         // Verificar la fecha del token
         $dateActual = date('Y/m/d h:i:s', time());

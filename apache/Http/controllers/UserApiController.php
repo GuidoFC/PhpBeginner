@@ -104,7 +104,9 @@ class UserApiController
 
         $tokenDao = new TokenDAO();
         // $token, $dispotivo, $user_id, $created_at, $finaliza
-        $tokenDao->storeTokenInDatabase($tokenEncriptado ,$dispotivo ,$user['id'], $dateActual, $caducidadToken);
+
+
+        $tokenDao->storeTokenInDatabase($tokenEncriptado ,$user['id'], $dateActual, $caducidadToken);
 
         // Responder con el token
         http_response_code(200);
