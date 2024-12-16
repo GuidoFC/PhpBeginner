@@ -84,9 +84,17 @@ class Router
             }
         }
 
-        // Si no encuentra ninguna ruta válida, aborta
-        $this->abort();
-        return $this;
+        if (strpos($route['uri'], "/api") !== false) {
+
+            $Isapi = true;
+            $this->abort($Isapi);
+            die();
+        }else{
+            // Si no encuentra ninguna ruta válida, aborta
+            $this->abort();
+            return $this;
+        }
+
     }
 
     public function nuevaRutaConArroba($functionClass, $classControler ){
@@ -107,13 +115,31 @@ class Router
 
     }
 
-    protected function abort($code = 404)
+    protected function abort($Isapi = false)
     {
-        http_response_code($code);
-        require base_path("views/{$code}.php");
-        die();
+        $code = 404;
+        if ($Isapi) {
+        $this->sendErrorResponse($code, "Esta ruta no existe");
+        }else{
+            http_response_code($code);
+            require base_path("views/{$code}.php");
+            die();
+        }
+
     }
 
+
+    private function sendErrorResponse($statusCode, $message)
+    {
+
+        http_response_code($statusCode);
+        echo json_encode([
+            'status' => 'error',
+            'message' => $message,
+        ]);
+        // Detiene la ejecución después de enviar la respuesta.
+        exit;
+    }
     public function previousUrl()
     {
         return $_SERVER['HTTP_REFERER'];

@@ -14,7 +14,7 @@ class UsuarioDAO implements CrudUsuario
 // email: 19@gmail.com
 // contra 123456789
 
-    public function crearUsuarioBD(Usuario|\Core\model\Usuario $crearUsuario)
+    public function crearUsuarioBD(Usuario|\Core\model\Usuario $crearUsuario, $isApi = false)
     {
         $db = App::resolve(Database::class);
         $db->query(
@@ -31,9 +31,11 @@ class UsuarioDAO implements CrudUsuario
         $crearUsuario->setId(self::getIdUserCreate($crearUsuario));
         $auth = new Authenticator();
 
+        if ($isApi == false) {
+            $auth->login($crearUsuario->getCorreo(), $crearUsuario->getId());
+            redirect('/');
+        }
 
-        $auth->login($crearUsuario->getCorreo(), $crearUsuario->getId());
-        redirect('/');
     }
 
     public static function getIdUserCreate($crearUsuario): int

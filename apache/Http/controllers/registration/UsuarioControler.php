@@ -114,6 +114,7 @@ class UsuarioControler
 
 
         if (!$user) {
+
             // TODO Creo el usuario y luego se lo paso al Service, este se lo Pasa al DAO y luego se hace el Insert del nuevo usuario
             $newUsuario = new \Core\model\Usuario(null, $nombre, $fecha_nacimiento, $email, $password);
 
@@ -125,7 +126,9 @@ class UsuarioControler
 
 // Usar el servicio para crear un usuario
 
-            $usuarioService->crearUsuario($newUsuario);
+            // Variable para la API:
+            $isApi = true;
+            $usuarioService->crearUsuario($newUsuario, $isApi);
 
 
             if ($req != null) {
@@ -173,6 +176,7 @@ class UsuarioControler
 
     private function sendSuccesResponse($statusCode, $message, $data = null)
     {
+
         // Construir el array de respuesta
         $response = [
             'status' => 'Peticion realizada con exito',
